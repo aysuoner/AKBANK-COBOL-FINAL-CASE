@@ -59,10 +59,10 @@
       *------------
        PROCEDURE DIVISION USING LN-SUB-AREA.
        MAIN-PRAG.
-           INITIALIZE IDX-REC
            PERFORM FILE-OPEN-CONTROL
            PERFORM SET-IDX-KEY
            PERFORM TYPE-DETECT
+           INITIALIZE IDX-REC
            INITIALIZE LN-SUB-AREA
            PERFORM PROGRAM-EXIT.
        MAIN-PRAG-END. EXIT.
@@ -98,8 +98,6 @@
             DISPLAY 'GECERSIZ ISTEK'
            END-EVALUATE.
        TYPE-DETECT-END. EXIT.
-      *----
-      *----
       *----
       *----
        READ-PROCESS.
@@ -151,6 +149,13 @@
       *----
        DELT-PROCESS.
            DISPLAY  'DELT'.
+           READ IDX-FILE KEY IS IDX-KEY
+           INVALID KEY
+              DISPLAY 'SILINECEK KEY BULUNAMADI'
+           NOT INVALID KEY
+              DELETE IDX-FILE RECORD 
+              DISPLAY 'SILINDI'
+           END-READ.
        DELT-PROCESS-END. EXIT.
       *----
       *----
