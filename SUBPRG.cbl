@@ -27,14 +27,21 @@
            05 IDX-JUL       PIC 9(07)    COMP-3.
            05 IDX-TUTAR     PIC 9(13)V99 COMP-3.
        WORKING-STORAGE SECTION.
-       01  EXIT-FLAG            PIC X(01) VALUE 'N'.
+       01  EXIT-FLAG          PIC X(01) VALUE 'N'.
        01  FILE-FLAGS.
-           05 IDX-ST            PIC 9(02).
-               88 IDX-SUCCESS   VALUE 00 41 97.
-               88 DUPLICATE     VALUE 22.
-       01 IDX-TEMP-VARIABLE.
-           05 TMP-IDX-FIRSTN    PIC X(15).
-           05 TMP-IDX-LASTN     PIC X(15).
+           05 IDX-ST          PIC 9(02).
+               88 IDX-SUCCESS VALUE 00 41 97.
+               88 DUPLICATE   VALUE 22.
+       01  REMOVE-SPACES-VAR.
+           05  TMP-STR.
+             07 LEN      PIC  9(02).
+             07 CHARS    PIC  X(15).
+             07 I        PIC  9(02).
+             07 J        PIC  9(02).
+             07 K        PIC  9(02).
+           05  RES-STR.
+             07 LEN   PIC 9(02).
+             07 CHARS PIC X(15).
        LINKAGE SECTION.
        01  LN-SUB-AREA.
            05 LN-PROC-TYPE     PIC X(01).
@@ -118,26 +125,27 @@
        WRITE-PROCESS-END. EXIT.
       *----
       *----
-      *----
-      *----
        UPDTE-PROCESS.
            DISPLAY 'UPDATE'
            READ IDX-FILE KEY IS IDX-KEY
            INVALID KEY
               DISPLAY 'UPDATE ICIN KAYIT BULUNAMADI'
            NOT INVALID KEY
-              DISPLAY 'UPDATE ICIN KAYIT BULUNDU: ' IDX-FIRSTN IDX-LASTN
-				
-      *        MOVE IDX-FIRSTN TO TMP-IDX-FIRSTN
-      *        MOVE IDX-LASTN TO TMP-IDX-LASTN
-      *		  DISPLAY 'TMP-IDX: ' TMP-IDX-FIRSTN
-      *		  DISPLAY 'UPD-TMP-IDX: ' TMP-IDX-FIRSTN
-      *        MOVE TMP-IDX-FIRSTN TO IDX-FIRSTN
-      *        DISPLAY 'UPDATE ICIN KAYIT BULUNDU'
+      * 
+            MOVE IDX-FIRSTN TO CHARS OF TMP-STR
+            PERFORM REMOVE-SPACES
+            PERFORM REPLACING-CHR
+            MOVE CHARS OF RES-STR TO IDX-FIRSTN
+      * 
+      * 
+            MOVE IDX-LASTN TO CHARS OF TMP-STR
+            PERFORM REMOVE-SPACES
+            PERFORM REPLACING-CHR
+            MOVE CHARS OF RES-STR TO IDX-LASTN
+      * 
            END-READ.
+           DISPLAY 'UPD:' IDX-FIRSTN IDX-LASTN.
        UPDTE-PROCESS-END. EXIT.
-      *----
-      *----
       *----
       *----
        DELT-PROCESS.
@@ -145,9 +153,29 @@
        DELT-PROCESS-END. EXIT.
       *----
       *----
+       REMOVE-SPACES.
+           MOVE 1 TO I J
+           COMPUTE LEN OF TMP-STR = LENGTH OF CHARS OF TMP-STR
+           PERFORM UNTIL I > LEN OF TMP-STR
+            MOVE 0 TO K
+            UNSTRING CHARS OF TMP-STR
+               DELIMITED BY ' '
+               INTO CHARS OF RES-STR(J:)
+               COUNT IN K
+               WITH POINTER I
+            END-UNSTRING
+            ADD J TO K GIVING J
+           END-PERFORM.
+       REMOVE-SPACES-END. EXIT.
       *----
       *----
-      *----
+       REPLACING-CHR.
+           INSPECT CHARS OF RES-STR
+           REPLACING ALL 'e' BY 'i', 
+                         'E' BY 'I',
+                         'a' BY 'e',
+                         'A' BY 'E'.
+       REPLACING-CHR-END. EXIT.
       *----
       *----
        PROGRAM-EXIT.
