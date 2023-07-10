@@ -32,6 +32,9 @@
            05 IDX-ST            PIC 9(02).
                88 IDX-SUCCESS   VALUE 00 41 97.
                88 DUPLICATE     VALUE 22.
+       01 IDX-TEMP-VARIABLE.
+           05 TMP-IDX-FIRSTN    PIC X(15).
+           05 TMP-IDX-LASTN     PIC X(15).
        LINKAGE SECTION.
        01  LN-SUB-AREA.
            05 LN-PROC-TYPE     PIC X(01).
@@ -110,7 +113,7 @@
               WRITE IDX-REC
               DISPLAY 'ADDED NEW RECORD'
            NOT INVALID KEY
-              DISPLAY 'DUPLICATE ERROR FOR WRITE: ' IDX-FIRSTN IDX-LASTN 
+              DISPLAY 'DUPLICATE ERROR FOR WRITE: ' IDX-FIRSTN IDX-LASTN
            END-READ.
        WRITE-PROCESS-END. EXIT.
       *----
@@ -118,7 +121,20 @@
       *----
       *----
        UPDTE-PROCESS.
-           DISPLAY  'UPDATE'.
+           DISPLAY 'UPDATE'
+           READ IDX-FILE KEY IS IDX-KEY
+           INVALID KEY
+              DISPLAY 'UPDATE ICIN KAYIT BULUNAMADI'
+           NOT INVALID KEY
+              DISPLAY 'UPDATE ICIN KAYIT BULUNDU: ' IDX-FIRSTN IDX-LASTN
+				
+      *        MOVE IDX-FIRSTN TO TMP-IDX-FIRSTN
+      *        MOVE IDX-LASTN TO TMP-IDX-LASTN
+      *		  DISPLAY 'TMP-IDX: ' TMP-IDX-FIRSTN
+      *		  DISPLAY 'UPD-TMP-IDX: ' TMP-IDX-FIRSTN
+      *        MOVE TMP-IDX-FIRSTN TO IDX-FIRSTN
+      *        DISPLAY 'UPDATE ICIN KAYIT BULUNDU'
+           END-READ.
        UPDTE-PROCESS-END. EXIT.
       *----
       *----
@@ -127,12 +143,13 @@
        DELT-PROCESS.
            DISPLAY  'DELT'.
        DELT-PROCESS-END. EXIT.
-      *
-      *
-      *
-      *
-      *
-      *
+      *----
+      *----
+      *----
+      *----
+      *----
+      *----
+      *----
        PROGRAM-EXIT.
            IF EXIT-FLAG = 'Y' THEN
                CLOSE IDX-FILE
