@@ -1,6 +1,10 @@
       *------------------------------
        IDENTIFICATION DIVISION.
       *------------------------------
+      *NOT: INPFILE'DA BIR DEGIŞIKLIK YAPTIKTAN SONRA MAIN'I CALISTIRDI
+      *GINDA ISTEDIGIN VERIYI ALAMIYORSAN ONCE VSAM DOSYASINI SUBMIT ET
+      * CUNKU BIR OONCEKI WRITE DELT- UPDATE ISLEMI ILE ILK VSAM
+      * DEGISMIS OLABILIR.!!!!!
        PROGRAM-ID.    SUBPRG.
        AUTHOR.        AYSU ONER.
        DATE-WRITTEN.  09/07/2023.
@@ -55,6 +59,7 @@
       *------------
        PROCEDURE DIVISION USING LN-SUB-AREA.
        MAIN-PRAG.
+           INITIALIZE IDX-REC
            PERFORM FILE-OPEN-CONTROL
            PERFORM SET-IDX-KEY
            PERFORM TYPE-DETECT
@@ -103,10 +108,9 @@
            INVALID KEY
             DISPLAY 'Record Undefined: '
            NOT INVALID KEY
-            DISPLAY 'Record OK: '.
+            DISPLAY 'Record OK: '
+            DISPLAY 'rec' IDX-FIRSTN IDX-LASTN.
        READ-PROCESS-END. EXIT.
-      *----
-      *----
       *----
       *----
        WRITE-PROCESS.
@@ -118,9 +122,9 @@
               MOVE '1995126' TO IDX-JUL
               MOVE '000000000000000' TO IDX-TUTAR
               WRITE IDX-REC
-              DISPLAY 'ADDED NEW RECORD'
+              DISPLAY 'ADDED NEW RECORD:' IDX-FIRSTN IDX-LASTN
            NOT INVALID KEY
-              DISPLAY 'DUPLICATE ERROR FOR WRITE: ' IDX-FIRSTN IDX-LASTN
+              DISPLAY 'DUPLICATE ERROR FOR WRITE:' IDX-FIRSTN IDX-LASTN
            END-READ.
        WRITE-PROCESS-END. EXIT.
       *----
@@ -131,20 +135,17 @@
            INVALID KEY
               DISPLAY 'UPDATE ICIN KAYIT BULUNAMADI'
            NOT INVALID KEY
-      * 
-            MOVE IDX-FIRSTN TO CHARS OF TMP-STR
-            PERFORM REMOVE-SPACES
-            PERFORM REPLACING-CHR
-            MOVE CHARS OF RES-STR TO IDX-FIRSTN
-      * 
-      * 
-            MOVE IDX-LASTN TO CHARS OF TMP-STR
-            PERFORM REMOVE-SPACES
-            PERFORM REPLACING-CHR
-            MOVE CHARS OF RES-STR TO IDX-LASTN
-      * 
+             MOVE IDX-FIRSTN TO CHARS OF TMP-STR
+             PERFORM REMOVE-SPACES
+             PERFORM REPLACING-CHR
+             MOVE CHARS OF RES-STR TO IDX-FIRSTN
+             MOVE IDX-LASTN TO CHARS OF TMP-STR
+             PERFORM REMOVE-SPACES
+             PERFORM REPLACING-CHR
+             MOVE CHARS OF RES-STR TO IDX-LASTN
+             REWRITE IDX-REC
+             DISPLAY 'UPD:' IDX-FIRSTN IDX-LASTN
            END-READ.
-           DISPLAY 'UPD:' IDX-FIRSTN IDX-LASTN.
        UPDTE-PROCESS-END. EXIT.
       *----
       *----
