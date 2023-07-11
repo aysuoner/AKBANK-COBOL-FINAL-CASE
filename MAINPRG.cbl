@@ -41,30 +41,35 @@
       *--------------------
         PROCEDURE DIVISION.
       *--------------------
-           OPEN INPUT INP-FILE.
+       MAIN-PRAG.
+           PERFORM FILE-OPEN-CONTROL
+           PERFORM READ-INP-FILE
+           MOVE 'Y' TO EXIT-FLAG
+           MOVE 00 TO RETURN-CODE
+           PERFORM PROGRAM-EXIT.
+       MAIN-PRAG-END. EXIT.
+      *----
       *----
        FILE-OPEN-CONTROL.
+           OPEN INPUT INP-FILE.
            IF NOT INP-SUCCESS
-             DISPLAY 'FILEM CANNOT OPEN'
-             MOVE 'Y' TO EXIT-FLAG
-             MOVE 99 TO RETURN-CODE
-             PERFORM PROGRAM-EXIT
+            DISPLAY '.INP FILE CANNOT OPEN: ' INP-ST
+            MOVE 'Y' TO EXIT-FLAG
+            MOVE 99 TO RETURN-CODE
+            PERFORM PROGRAM-EXIT
            END-IF.
        FILE-OPEN-CONTROL-END. EXIT.
       *----
        READ-INP-FILE.
            READ INP-FILE
            PERFORM UNTIL INP-EOF
-              MOVE INP-TYPE TO PROC-TYPE
-              MOVE INP-ID   TO SUB-IDX-ID
-              MOVE INP-DVZ  TO SUB-IDX-DVZ
-              MOVE INP-KEY  TO SUB-IDX-KEY
-              CALL 'SUBPRG' USING SUB-AREA
-              READ INP-FILE
+            MOVE INP-TYPE TO PROC-TYPE
+            MOVE INP-ID   TO SUB-IDX-ID
+            MOVE INP-DVZ  TO SUB-IDX-DVZ
+            MOVE INP-KEY  TO SUB-IDX-KEY
+            CALL 'SUBPRG' USING SUB-AREA
+            READ INP-FILE
            END-PERFORM.
-           MOVE 'Y' TO EXIT-FLAG
-           MOVE 00 TO RETURN-CODE
-           PERFORM PROGRAM-EXIT.
        READ-INP-FILE-END. EXIT.
       *----
        PROGRAM-EXIT.
