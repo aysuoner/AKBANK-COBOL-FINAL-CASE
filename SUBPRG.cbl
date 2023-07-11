@@ -1,10 +1,13 @@
       *------------------------------
        IDENTIFICATION DIVISION.
       *------------------------------
-      *NOT: INPFILE'DA BIR DEGIŞIKLIK YAPTIKTAN SONRA MAIN'I CALISTIRDI
+      *NOT: INPFILE'DA BIR DEGISIKLIK YAPTIKTAN SONRA MAIN'I CALISTIRDI
       *GINDA ISTEDIGIN VERIYI ALAMIYORSAN ONCE VSAM DOSYASINI SUBMIT ET
-      * CUNKU BIR OONCEKI WRITE DELT- UPDATE ISLEMI ILE ILK VSAM
-      * DEGISMIS OLABILIR.!!!!!
+      *CUNKU BIR OONCEKI WRITE DELT- UPDATE ISLEMI ILE ILK VSAM
+      *DEGISMIS OLABILIR. BUNU NOT OLARAL README.md EKLE!!!!!
+      * 
+      *subprogramin surekli acilip kapanmamasi icin bir sey bul!!! 
+      * 
        PROGRAM-ID.    SUBPRG.
        AUTHOR.        AYSU ONER.
        DATE-WRITTEN.  09/07/2023.
@@ -62,18 +65,17 @@
            PERFORM FILE-OPEN-CONTROL
            PERFORM SET-IDX-KEY
            PERFORM TYPE-DETECT
-           INITIALIZE IDX-REC
-           INITIALIZE LN-SUB-AREA
+           MOVE 'Y' TO EXIT-FLAG
            PERFORM PROGRAM-EXIT.
        MAIN-PRAG-END. EXIT.
       *----
        FILE-OPEN-CONTROL.
            OPEN I-O IDX-FILE
            IF NOT IDX-SUCCESS
-              DISPLAY 'FILEX CANNOT OPEN: ' IDX-ST
-              MOVE 'Y' TO EXIT-FLAG
-              MOVE IDX-ST TO RETURN-CODE
-              PERFORM PROGRAM-EXIT
+            DISPLAY '.VSAM FILE CANNOT OPEN: ' IDX-ST
+            MOVE 'Y' TO EXIT-FLAG
+            MOVE IDX-ST TO RETURN-CODE
+            PERFORM PROGRAM-EXIT
            END-IF.
        FILE-OPEN-CONTROL-END. EXIT.
       *----
@@ -153,7 +155,7 @@
            INVALID KEY
               DISPLAY 'SILINECEK KEY BULUNAMADI'
            NOT INVALID KEY
-              DELETE IDX-FILE RECORD 
+              DELETE IDX-FILE RECORD
               DISPLAY 'SILINDI'
            END-READ.
        DELT-PROCESS-END. EXIT.
@@ -177,7 +179,7 @@
       *----
        REPLACING-CHR.
            INSPECT CHARS OF RES-STR
-           REPLACING ALL 'e' BY 'i', 
+           REPLACING ALL 'e' BY 'i',
                          'E' BY 'I',
                          'a' BY 'e',
                          'A' BY 'E'.
@@ -185,11 +187,11 @@
       *----
       *----
        PROGRAM-EXIT.
+           INITIALIZE IDX-REC
+           INITIALIZE LN-SUB-AREA
            IF EXIT-FLAG = 'Y' THEN
                CLOSE IDX-FILE
                EXIT PROGRAM
-           ELSE
-              EXIT PROGRAM
            END-IF.
        PROGRAM-EXIT-END.
        END PROGRAM SUBPRG.
