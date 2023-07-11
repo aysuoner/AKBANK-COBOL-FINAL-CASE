@@ -5,9 +5,9 @@
       *GINDA ISTEDIGIN VERIYI ALAMIYORSAN ONCE VSAM DOSYASINI SUBMIT ET
       *CUNKU BIR OONCEKI WRITE DELT- UPDATE ISLEMI ILE ILK VSAM
       *DEGISMIS OLABILIR. BUNU NOT OLARAL README.md EKLE!!!!!
-      * 
-      *subprogramin surekli acilip kapanmamasi icin bir sey bul!!! 
-      * 
+      *
+      *subprogramin surekli acilip kapanmamasi icin bir sey bul!!!
+      *
        PROGRAM-ID.    SUBPRG.
        AUTHOR.        AYSU ONER.
        DATE-WRITTEN.  09/07/2023.
@@ -27,40 +27,45 @@
        FD  IDX-FILE.
        01  IDX-REC.
            05 IDX-KEY.
-              10  IDX-ID    PIC 9(05)    COMP-3.
-              10  IDX-DVZ   PIC 9(03)    COMP.
-           05 IDX-FIRSTN    PIC X(15).
-           05 IDX-LASTN     PIC X(15).
-           05 IDX-JUL       PIC 9(07)    COMP-3.
-           05 IDX-TUTAR     PIC 9(13)V99 COMP-3.
+              10  IDX-ID      PIC 9(05)    COMP-3.
+              10  IDX-DVZ     PIC 9(03)    COMP.
+           05 IDX-FIRSTN      PIC X(15).
+           05 IDX-LASTN       PIC X(15).
+           05 IDX-JUL         PIC 9(07)    COMP-3.
+           05 IDX-TUTAR       PIC 9(13)V99 COMP-3.
        WORKING-STORAGE SECTION.
+       01  WS-ERROR-MSG       PIC X(80).
        01  EXIT-FLAG          PIC X(01) VALUE 'N'.
        01  FILE-FLAGS.
            05 IDX-ST          PIC 9(02).
                88 IDX-SUCCESS VALUE 00 41 97.
-               88 DUPLICATE   VALUE 22.
        01  REMOVE-SPACES-VAR.
-           05  TMP-STR.
-             07 LEN      PIC  9(02).
-             07 CHARS    PIC  X(15).
-             07 I        PIC  9(02).
-             07 J        PIC  9(02).
-             07 K        PIC  9(02).
-           05  RES-STR.
-             07 LEN   PIC 9(02).
-             07 CHARS PIC X(15).
+           05 TMP-STR.
+            10 LEN      PIC  9(02).
+            10 CHARS    PIC  X(15).
+            10 I        PIC  9(02).
+            10 J        PIC  9(02).
+            10 K        PIC  9(02).
+           05 RES-STR.
+            10 LEN   PIC 9(02).
+            10 CHARS PIC X(15).
        LINKAGE SECTION.
-       01  LN-SUB-AREA.
-           05 LN-PROC-TYPE     PIC X(01).
-             88 LN-READ-TYPE   VALUE 'R'.
-             88 LN-WRITE-TYPE  VALUE 'W'.
-             88 LN-UPDTE-TYPE  VALUE 'U'.
-             88 LN-DELT-TYPE   VALUE 'D'.
-           05 LN-SUB-IDX-KEY.
-            07 LN-SUB-IDX-ID   PIC 9(05) COMP-3.
-            07 LN-SUB-IDX-DVZ  PIC 9(03) COMP.
+       01  LN-IDX-AREA.
+         05 LN-PROC-TYPE     PIC   X(01).
+           88 LN-READ-TYPE   VALUE 'R'.
+           88 LN-WRITE-TYPE  VALUE 'W'.
+           88 LN-UPDTE-TYPE  VALUE 'U'.
+           88 LN-DELT-TYPE   VALUE 'D'.
+         05 LN-SUB-IDX-KEY.
+           15 LN-SUB-IDX-ID  PIC 9(05) COMP-3.
+           15 LN-SUB-IDX-DVZ PIC 9(03) COMP.
+       01  LN-OUT-MSG-INFO.
+         05 OUT-RC           PIC 9(02).
+         05 OUT-MSG          PIC X(30).
+      *   05 OUT-FROM         PIC X(15).
+      *   05 OUT-TO           PIC X(15).
       *------------
-       PROCEDURE DIVISION USING LN-SUB-AREA.
+       PROCEDURE DIVISION USING LN-IDX-AREA LN-OUT-MSG-INFO.
        MAIN-PRAG.
            PERFORM FILE-OPEN-CONTROL
            PERFORM SET-IDX-KEY
@@ -86,7 +91,6 @@
        SET-IDX-KEY-END. EXIT.
       *----
        TYPE-DETECT.
-           DISPLAY "LNINP:" LN-PROC-TYPE
            EVALUATE TRUE
            WHEN LN-READ-TYPE
             PERFORM READ-PROCESS
@@ -103,37 +107,38 @@
       *----
       *----
        READ-PROCESS.
-           DISPLAY 'READ'
            READ IDX-FILE KEY IS IDX-KEY
            INVALID KEY
-            DISPLAY 'Record Undefined: '
+            MOVE IDX-ST TO OUT-RC
+            MOVE ' RECORD NOT FOUND' TO OUT-MSG
            NOT INVALID KEY
-            DISPLAY 'Record OK: '
-            DISPLAY 'rec' IDX-FIRSTN IDX-LASTN.
+            MOVE IDX-ST TO OUT-RC
+            MOVE ' RECORD READ' TO OUT-MSG
+           END-READ.
        READ-PROCESS-END. EXIT.
       *----
       *----
        WRITE-PROCESS.
-           DISPLAY 'WRITE'
            READ IDX-FILE KEY IS IDX-KEY
            INVALID KEY
-              MOVE 'AYSU           ' TO IDX-FIRSTN
-              MOVE 'ONER           ' TO IDX-LASTN
-              MOVE '1995126' TO IDX-JUL
-              MOVE '000000000000000' TO IDX-TUTAR
-              WRITE IDX-REC
-              DISPLAY 'ADDED NEW RECORD:' IDX-FIRSTN IDX-LASTN
+             MOVE 00 TO OUT-RC
+             MOVE ' RECORD ADDED'    TO OUT-MSG.
+             MOVE 'AYSU           ' TO IDX-FIRSTN
+             MOVE 'ONER           ' TO IDX-LASTN
+             MOVE '1995126'         TO IDX-JUL
+             MOVE '000000000000000' TO IDX-TUTAR
+             WRITE IDX-REC
            NOT INVALID KEY
-              DISPLAY 'DUPLICATE ERROR FOR WRITE:' IDX-FIRSTN IDX-LASTN
-           END-READ.
+            MOVE IDX-ST TO OUT-RC
+            MOVE ' RECORD READ' TO OUT-MSG.
        WRITE-PROCESS-END. EXIT.
       *----
       *----
        UPDTE-PROCESS.
-           DISPLAY 'UPDATE'
            READ IDX-FILE KEY IS IDX-KEY
            INVALID KEY
-              DISPLAY 'UPDATE ICIN KAYIT BULUNAMADI'
+            MOVE IDX-ST TO OUT-RC
+            MOVE ' RECORD NOT FOUND' TO OUT-MSG
            NOT INVALID KEY
              MOVE IDX-FIRSTN TO CHARS OF TMP-STR
              PERFORM REMOVE-SPACES
@@ -144,19 +149,21 @@
              PERFORM REPLACING-CHR
              MOVE CHARS OF RES-STR TO IDX-LASTN
              REWRITE IDX-REC
-             DISPLAY 'UPD:' IDX-FIRSTN IDX-LASTN
+             MOVE IDX-ST TO OUT-RC
+             MOVE ' RECORD UPDATED' TO OUT-MSG
            END-READ.
        UPDTE-PROCESS-END. EXIT.
       *----
       *----
        DELT-PROCESS.
-           DISPLAY  'DELT'.
            READ IDX-FILE KEY IS IDX-KEY
            INVALID KEY
-              DISPLAY 'SILINECEK KEY BULUNAMADI'
+            MOVE IDX-ST TO OUT-RC
+            MOVE ' RECORD NOT FOUND' TO OUT-MSG
            NOT INVALID KEY
-              DELETE IDX-FILE RECORD
-              DISPLAY 'SILINDI'
+            DELETE IDX-FILE RECORD
+             MOVE IDX-ST TO OUT-RC
+             MOVE ' RECORD DELETED' TO OUT-MSG
            END-READ.
        DELT-PROCESS-END. EXIT.
       *----
@@ -187,8 +194,6 @@
       *----
       *----
        PROGRAM-EXIT.
-           INITIALIZE IDX-REC
-           INITIALIZE LN-SUB-AREA
            IF EXIT-FLAG = 'Y' THEN
                CLOSE IDX-FILE
                EXIT PROGRAM
