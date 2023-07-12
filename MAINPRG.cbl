@@ -47,13 +47,12 @@
            05 OUT-ST         PIC 9(02).
             88 OUT-SUCCESS   VALUE 00 97.
        01  SUB-AREA.
-        05 IDX-SUB.
-         10 PROC-TYPE        PIC   X(01).
+         05 PROC-TYPE        PIC   X(01).
            88 READ-TYPE      VALUE 'R'.
            88 WRITE-TYPE     VALUE 'W'.
            88 UPDTE-TYPE     VALUE 'U'.
            88 DELT-TYPE      VALUE 'D'.
-         10 SUB-IDX-KEY.
+         05 SUB-IDX-KEY.
            15 SUB-IDX-ID     PIC 9(05) COMP-3.
            15 SUB-IDX-DVZ    PIC 9(03) COMP.
       *--------------------
@@ -84,16 +83,35 @@
        READ-INP-FILE.
            READ INP-FILE
            PERFORM UNTIL INP-EOF
-            MOVE INP-TYPE TO PROC-TYPE
             MOVE INP-ID   TO SUB-IDX-ID OUT-ID
             MOVE INP-DVZ  TO SUB-IDX-DVZ OUT-DVZ
             MOVE INP-KEY  TO SUB-IDX-KEY
             MOVE SPACES   TO OUT-MSG
-            CALL 'SUBPRG' USING SUB-AREA OUT-MSG-INFO
-            READ INP-FILE
+            MOVE INP-TYPE TO PROC-TYPE
+            PERFORM SUB-PROG-HANDLE
             PERFORM PRIN-OUT-FILE
+            CALL 'PROGRAM-EXIT'
+            READ INP-FILE
            END-PERFORM.
        READ-INP-FILE-END. EXIT.
+      *----
+      *----
+       SUB-PROG-HANDLE.
+           EVALUATE TRUE
+           WHEN READ-TYPE
+              CALL 'READ-PROCESS' USING OUT-MSG-INFO, SUB-IDX-KEY
+           WHEN WRITE-TYPE
+              CALL 'WRITE-PROCESS' USING OUT-MSG-INFO, SUB-IDX-KEY
+           WHEN UPDTE-TYPE 
+              CALL 'UPDTE-PROCESS' USING OUT-MSG-INFO, SUB-IDX-KEY
+           WHEN DELT-TYPE
+              CALL 'DELT-PROCESS' USING OUT-MSG-INFO, SUB-IDX-KEY
+           WHEN OTHER
+            MOVE 99 TO OUT-RC
+            MOVE ' UNDEFINED-PROC-TYPE' TO OUT-MSG
+           END-EVALUATE.
+       SUB-PROG-HANDLE-END. EXIT.
+      *----
       *----
        PRIN-OUT-FILE.
            EVALUATE TRUE
