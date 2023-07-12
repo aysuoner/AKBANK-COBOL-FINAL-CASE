@@ -22,21 +22,21 @@
        01  INP-REC.
 		     05 INP-TYPE       PIC X(01).
            05 INP-KEY.
-            07 INP-ID         PIC 9(05) COMP-3.
-            07 INP-DVZ        PIC 9(03) COMP.
+            07 INP-ID        PIC 9(05) COMP-3.
+            07 INP-DVZ       PIC 9(03) COMP.
       *****
        FD  OUT-FILE RECORDING MODE F.
        01  OUT-REC.
          03 OUT-KEY-INFO.
-           05 OUT-ID       PIC 9(05).
-           05 OUT-DVZ      PIC 9(03).
-           05 OUT-RROC-TYP PIC X(06).
-           03 OUT-RC-MSG   PIC X(03).
+           05 OUT-ID         PIC 9(05).
+           05 OUT-DVZ        PIC 9(03).
+           05 OUT-RROC-TYP   PIC X(06).
+           03 OUT-RC-MSG     PIC X(03).
          03 OUT-MSG-INFO.
-           05 OUT-RC       PIC 9(02).
-           05 OUT-MSG      PIC X(35).
-      *     05 OUT-FROM     PIC X(15).
-      *     05 OUT-TO       PIC X(15).
+           05 OUT-RC         PIC 9(02).
+           05 OUT-MSG        PIC X(35).
+      *     05 OUT-FROM      PIC X(15).
+      *     05 OUT-TO        PIC X(15).
       *****
        WORKING-STORAGE SECTION.
        01  EXIT-FLAG         PIC X(01) VALUE 'N'.
@@ -48,21 +48,20 @@
             88 OUT-SUCCESS   VALUE 00 97.
        01  SUB-AREA.
         05 IDX-SUB.
-         10 PROC-TYPE     PIC   X(01).
-           88 READ-TYPE   VALUE 'R'.
-           88 WRITE-TYPE  VALUE 'W'.
-           88 UPDTE-TYPE  VALUE 'U'.
-           88 DELT-TYPE   VALUE 'D'.
+         10 PROC-TYPE        PIC   X(01).
+           88 READ-TYPE      VALUE 'R'.
+           88 WRITE-TYPE     VALUE 'W'.
+           88 UPDTE-TYPE     VALUE 'U'.
+           88 DELT-TYPE      VALUE 'D'.
          10 SUB-IDX-KEY.
-           15 SUB-IDX-ID  PIC 9(05) COMP-3.
-           15 SUB-IDX-DVZ PIC 9(03) COMP.
+           15 SUB-IDX-ID     PIC 9(05) COMP-3.
+           15 SUB-IDX-DVZ    PIC 9(03) COMP.
       *--------------------
         PROCEDURE DIVISION.
       *--------------------
        MAIN-PRAG.
            PERFORM FILE-OPEN-CONTROL
            PERFORM READ-INP-FILE
-           PERFORM PRIN-OUT-FILE
            MOVE 'Y' TO EXIT-FLAG
            MOVE 00 TO RETURN-CODE
            PERFORM PROGRAM-EXIT.
@@ -92,6 +91,7 @@
             MOVE SPACES   TO OUT-MSG
             CALL 'SUBPRG' USING SUB-AREA OUT-MSG-INFO
             READ INP-FILE
+            PERFORM PRIN-OUT-FILE
            END-PERFORM.
        READ-INP-FILE-END. EXIT.
       *----
@@ -105,6 +105,8 @@
                  MOVE '-UPDT-' TO OUT-RROC-TYP
               WHEN DELT-TYPE IN PROC-TYPE
                  MOVE '-DELT-' TO OUT-RROC-TYP
+              WHEN OTHER
+                 MOVE '-UNDF-' TO OUT-RROC-TYP
            END-EVALUATE
            MOVE 'RC: ' TO OUT-RC-MSG
            WRITE OUT-REC.
