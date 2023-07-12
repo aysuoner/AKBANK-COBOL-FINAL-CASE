@@ -55,10 +55,8 @@
            05 LN-SUB-IDX-ID     PIC 9(05) COMP-3.
            05 LN-SUB-IDX-DVZ    PIC 9(03) COMP.
        01  LN-OUT-MSG-INFO.
-           05 OUT-RC            PIC 9(02).
-           05 OUT-MSG           PIC X(30).
-      *    05 OUT-FROM          PIC X(15).
-      *    05 OUT-TO            PIC X(15).
+           05 LN-OUT-RC            PIC 9(02).
+           05 LN-OUT-MSG           PIC X(20).
       *------------
        PROCEDURE DIVISION USING LN-SUB-IDX-KEY LN-OUT-MSG-INFO.
       *----
@@ -81,11 +79,11 @@
            PERFORM FILE-OPEN-CONTROL
            READ IDX-FILE KEY IS IDX-KEY
            INVALID KEY
-             MOVE IDX-ST TO OUT-RC
-             MOVE ' RECORD NOT FOUND' TO OUT-MSG
+             MOVE IDX-ST TO LN-OUT-RC
+             MOVE ' RECORD NOT FOUND' TO LN-OUT-MSG
            NOT INVALID KEY
-             MOVE IDX-ST TO OUT-RC
-             MOVE ' RECORD READ' TO OUT-MSG
+             MOVE IDX-ST TO LN-OUT-RC
+             MOVE ' RECORD READ' TO LN-OUT-MSG
            END-READ.
            SET FUNC TO TRUE.
            PERFORM EXIT-SUBPROG.
@@ -102,11 +100,11 @@
            END-READ
            WRITE IDX-REC
            INVALID KEY
-              MOVE IDX-ST TO OUT-RC
-              MOVE ' DUPLICATE RECORD' TO OUT-MSG
+              MOVE IDX-ST TO LN-OUT-RC
+              MOVE ' DUPLICATE RECORD' TO LN-OUT-MSG
            NOT INVALID KEY
-              MOVE IDX-ST TO OUT-RC
-              MOVE ' NEW RECORD ADDED' TO OUT-MSG
+              MOVE IDX-ST TO LN-OUT-RC
+              MOVE ' NEW RECORD ADDED' TO LN-OUT-MSG
            END-WRITE.
            SET FUNC TO TRUE.
            PERFORM EXIT-SUBPROG.
@@ -116,22 +114,25 @@
            PERFORM FILE-OPEN-CONTROL
            READ IDX-FILE KEY IS IDX-KEY
            NOT INVALID KEY
+      *****updateforname
              MOVE IDX-FIRSTN TO CHARS OF TMP-STR
              PERFORM REMOVE-SPACES
              PERFORM REPLACING-CHR
              MOVE CHARS OF RES-STR TO IDX-FIRSTN
+      *****updateforlastname
              MOVE IDX-LASTN TO CHARS OF TMP-STR
              PERFORM REMOVE-SPACES
              PERFORM REPLACING-CHR
              MOVE CHARS OF RES-STR TO IDX-LASTN
+      *****
            END-READ.
            REWRITE IDX-REC
            INVALID KEY
-             MOVE IDX-ST TO OUT-RC
-             MOVE ' RECORD NOT FOUND' TO OUT-MSG
+             MOVE IDX-ST TO LN-OUT-RC
+             MOVE ' RECORD NOT FOUND' TO LN-OUT-MSG
            NOT INVALID KEY
-             MOVE IDX-ST TO OUT-RC
-             MOVE ' RECORD UPDATED' TO OUT-MSG
+             MOVE IDX-ST TO LN-OUT-RC
+             MOVE ' RECORD UPDATED' TO LN-OUT-MSG
            END-REWRITE.
            SET FUNC TO TRUE.
            PERFORM EXIT-SUBPROG.
@@ -141,11 +142,11 @@
            PERFORM FILE-OPEN-CONTROL
            DELETE IDX-FILE RECORD
            INVALID KEY
-             MOVE IDX-ST TO OUT-RC
-             MOVE ' RECORD NOT FOUND' TO OUT-MSG
+             MOVE IDX-ST TO LN-OUT-RC
+             MOVE ' RECORD NOT FOUND' TO LN-OUT-MSG
            NOT INVALID KEY
-             MOVE IDX-ST TO OUT-RC
-             MOVE ' RECORD DELETED' TO OUT-MSG
+             MOVE IDX-ST TO LN-OUT-RC
+             MOVE ' RECORD DELETED' TO LN-OUT-MSG
            END-DELETE.
            SET FUNC TO TRUE.
            PERFORM EXIT-SUBPROG.
@@ -188,29 +189,3 @@
                EXIT PROGRAM
            END-IF.
        END PROGRAM SUBPRG.
-      *
-      *
-      *
-      *
-      *
-      * SET-IDX-KEY.
-      *     MOVE LN-SUB-IDX-ID  TO IDX-ID
-      *     MOVE LN-SUB-IDX-DVZ TO IDX-DVZ
-      *     MOVE LN-SUB-IDX-KEY TO IDX-KEY.
-      * SET-IDX-KEY-END. EXIT.
-      *----
-
-
-      *----
-      * TYPE-DETECT.
-      *     EVALUATE TRUE
-      *     WHEN LN-UPDTE-TYPE
-      *      PERFORM UPDTE-PROCESS
-      *     WHEN LN-DELT-TYPE
-      *      PERFORM DELT-PROCESS
-      *     WHEN OTHER
-      *      MOVE 99 TO OUT-RC
-      *      MOVE ' UNDEFINED-PROC-TYPE' TO OUT-MSG
-      *     END-EVALUATE.
-      * TYPE-DETECT-END. EXIT.
-      *----

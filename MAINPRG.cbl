@@ -34,9 +34,9 @@
            03 OUT-RC-MSG     PIC X(03).
          03 OUT-MSG-INFO.
            05 OUT-RC         PIC 9(02).
-           05 OUT-MSG        PIC X(35).
-      *     05 OUT-FROM      PIC X(15).
-      *     05 OUT-TO        PIC X(15).
+           05 OUT-MSG        PIC X(20).
+      *     05 OUT-FROM       PIC X(15).
+      *     05 OUT-TO         PIC X(15).
       *****
        WORKING-STORAGE SECTION.
        01  EXIT-FLAG         PIC X(01) VALUE 'N'.
@@ -115,13 +115,13 @@
       *----
        PRIN-OUT-FILE.
            EVALUATE TRUE
-              WHEN READ-TYPE IN PROC-TYPE
+              WHEN READ-TYPE   IN PROC-TYPE
                  MOVE '-READ-' TO OUT-RROC-TYP
-              WHEN WRITE-TYPE IN PROC-TYPE
+              WHEN WRITE-TYPE  IN PROC-TYPE
                  MOVE '-WRIT-' TO OUT-RROC-TYP
-              WHEN UPDTE-TYPE IN PROC-TYPE
+              WHEN UPDTE-TYPE  IN PROC-TYPE
                  MOVE '-UPDT-' TO OUT-RROC-TYP
-              WHEN DELT-TYPE IN PROC-TYPE
+              WHEN DELT-TYPE   IN PROC-TYPE
                  MOVE '-DELT-' TO OUT-RROC-TYP
               WHEN OTHER
                  MOVE '-UNDF-' TO OUT-RROC-TYP
