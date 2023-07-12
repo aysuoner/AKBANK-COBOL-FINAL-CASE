@@ -77,9 +77,8 @@
        FILE-OPEN-CONTROL-END. EXIT.
       *----
       *----
-           ENTRY 'READ-PROCESS' USING LN-OUT-MSG-INFO, LN-SUB-IDX-KEY.
+           ENTRY 'READPROC' USING LN-OUT-MSG-INFO, LN-SUB-IDX-KEY.
            PERFORM FILE-OPEN-CONTROL
-           DISPLAY IDX-ID IDX-DVZ
            READ IDX-FILE KEY IS IDX-KEY
            INVALID KEY
              MOVE IDX-ST TO OUT-RC
@@ -92,7 +91,7 @@
            PERFORM EXIT-SUBPROG.
       *----
       *----
-           ENTRY 'WRITE-PROCESS' USING LN-OUT-MSG-INFO, LN-SUB-IDX-KEY.
+           ENTRY 'WRITPROC' USING LN-OUT-MSG-INFO, LN-SUB-IDX-KEY.
            PERFORM FILE-OPEN-CONTROL
            READ IDX-FILE KEY IS IDX-KEY
            NOT INVALID KEY
@@ -113,7 +112,7 @@
            PERFORM EXIT-SUBPROG.
       *----
       *----
-           ENTRY 'UPDTE-PROCESS' USING LN-OUT-MSG-INFO, LN-SUB-IDX-KEY.
+           ENTRY 'UPDTPROC' USING LN-OUT-MSG-INFO, LN-SUB-IDX-KEY.
            PERFORM FILE-OPEN-CONTROL
            READ IDX-FILE KEY IS IDX-KEY
            NOT INVALID KEY
@@ -138,7 +137,7 @@
            PERFORM EXIT-SUBPROG.
       *----
       *----
-           ENTRY 'DELT-PROCESS' USING LN-OUT-MSG-INFO, LN-SUB-IDX-KEY.
+           ENTRY 'DELTPROC' USING LN-OUT-MSG-INFO, LN-SUB-IDX-KEY.
            PERFORM FILE-OPEN-CONTROL
            DELETE IDX-FILE RECORD
            INVALID KEY
@@ -183,7 +182,7 @@
            END-IF.
        EXIT-SUBPROG-END. EXIT.
       *----
-           ENTRY 'PROGRAM-EXIT'.
+           ENTRY 'PRGEXIT'.
            IF EXIT-FLAG = 'Y' THEN
                CLOSE IDX-FILE
                EXIT PROGRAM
