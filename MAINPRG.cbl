@@ -21,6 +21,10 @@
        FD  INP-FILE RECORDING MODE F.
        01  INP-REC.
 		     05 INP-TYPE       PIC X(01).
+              88 READ-TYPE             VALUE 'R'.
+              88 WRITE-TYPE            VALUE 'W'.
+              88 UPDTE-TYPE            VALUE 'U'.
+              88 DELT-TYPE             VALUE 'D'.
            05 INP-KEY.
             07 INP-ID        PIC 9(05) COMP-3.
             07 INP-DVZ       PIC 9(03) COMP.
@@ -30,13 +34,12 @@
          03 OUT-KEY-INFO.
            05 OUT-ID         PIC 9(05).
            05 OUT-DVZ        PIC 9(03).
-           05 OUT-RROC-TYP   PIC X(06).
-           03 OUT-RC-MSG     PIC X(03).
+           05 OUT-RROC-TYP   PIC X(09).
          03 OUT-MSG-INFO.
            05 OUT-RC         PIC 9(02).
            05 OUT-MSG        PIC X(20).
-      *     05 OUT-FROM       PIC X(15).
-      *     05 OUT-TO         PIC X(15).
+           05 OUT-FROM       PIC X(36).
+           05 OUT-TO         PIC X(34).
       *****
        WORKING-STORAGE SECTION.
        01  EXIT-FLAG         PIC X(01) VALUE 'N'.
@@ -47,14 +50,16 @@
            05 OUT-ST         PIC 9(02).
             88 OUT-SUCCESS   VALUE 00 97.
        01  SUB-AREA.
-         05 PROC-TYPE        PIC   X(01).
-           88 READ-TYPE      VALUE 'R'.
-           88 WRITE-TYPE     VALUE 'W'.
-           88 UPDTE-TYPE     VALUE 'U'.
-           88 DELT-TYPE      VALUE 'D'.
          05 SUB-IDX-KEY.
            15 SUB-IDX-ID     PIC 9(05) COMP-3.
            15 SUB-IDX-DVZ    PIC 9(03) COMP.
+         05 SUB-OUT-MSG-INFO.
+           15 SUB-OUT-RC         PIC 9(02).
+           15 SUB-OUT-MSG        PIC X(20).
+           15 SUB-NMFROM         PIC X(15).
+           15 SUB-NMTO           PIC X(15).
+           15 SUB-LSTFROM        PIC X(15).
+           15 SUB-LSTTO          PIC X(15).
       *--------------------
         PROCEDURE DIVISION.
       *--------------------
@@ -87,7 +92,8 @@
             MOVE INP-DVZ  TO SUB-IDX-DVZ OUT-DVZ
             MOVE INP-KEY  TO SUB-IDX-KEY
             MOVE SPACES   TO OUT-MSG
-            MOVE INP-TYPE TO PROC-TYPE
+            MOVE SPACES   TO OUT-FROM
+            MOVE SPACES   TO OUT-TO
             PERFORM SUB-PROG-HANDLE
             PERFORM PRIN-OUT-FILE
             CALL 'PRGEXIT'
@@ -99,38 +105,59 @@
        SUB-PROG-HANDLE.
            EVALUATE TRUE
            WHEN READ-TYPE
-              CALL 'READPROC' USING OUT-MSG-INFO, SUB-IDX-KEY
+              CALL 'READPROC' USING SUB-OUT-MSG-INFO, SUB-IDX-KEY
            WHEN WRITE-TYPE
-              CALL 'WRITPROC' USING OUT-MSG-INFO, SUB-IDX-KEY
+              CALL 'WRITPROC' USING SUB-OUT-MSG-INFO, SUB-IDX-KEY
            WHEN UPDTE-TYPE
-              CALL 'UPDTPROC' USING OUT-MSG-INFO, SUB-IDX-KEY
+              CALL 'UPDTPROC' USING SUB-OUT-MSG-INFO, SUB-IDX-KEY
            WHEN DELT-TYPE
-              CALL 'DELTPROC' USING OUT-MSG-INFO, SUB-IDX-KEY
+              CALL 'DELTPROC' USING SUB-OUT-MSG-INFO, SUB-IDX-KEY
            WHEN OTHER
-            MOVE 99 TO OUT-RC
-            MOVE ' UNDEFINED-PROC-TYPE' TO OUT-MSG
+            MOVE 99 TO SUB-OUT-RC
+            MOVE ' UNDEFINED-PROC-TYPE' TO SUB-OUT-MSG
            END-EVALUATE.
        SUB-PROG-HANDLE-END. EXIT.
       *----
       *----
        PRIN-OUT-FILE.
            EVALUATE TRUE
-              WHEN READ-TYPE   IN PROC-TYPE
-                 MOVE '-READ-' TO OUT-RROC-TYP
-              WHEN WRITE-TYPE  IN PROC-TYPE
-                 MOVE '-WRIT-' TO OUT-RROC-TYP
-              WHEN UPDTE-TYPE  IN PROC-TYPE
-                 MOVE '-UPDT-' TO OUT-RROC-TYP
-              WHEN DELT-TYPE   IN PROC-TYPE
-                 MOVE '-DELT-' TO OUT-RROC-TYP
+              WHEN READ-TYPE 
+                 MOVE '-READ-RC:' TO OUT-RROC-TYP
+              WHEN WRITE-TYPE
+                 MOVE '-WRIT-RC:' TO OUT-RROC-TYP
+              WHEN UPDTE-TYPE
+                 IF SUB-OUT-RC IS ZERO
+                   PERFORM FROM-TO-HANDLE
+                 END-IF
+                 MOVE '-UPDT-RC:' TO OUT-RROC-TYP
+              WHEN DELT-TYPE
+                 MOVE '-DELT-RC:' TO OUT-RROC-TYP
               WHEN OTHER
-                 MOVE '-UNDF-' TO OUT-RROC-TYP
+                 MOVE '-UNDF-RC:' TO OUT-RROC-TYP
            END-EVALUATE
-           MOVE 'RC: ' TO OUT-RC-MSG
-           WRITE OUT-REC.
-           INITIALIZE SUB-AREA
+           MOVE SUB-OUT-MSG TO OUT-MSG 
+           MOVE SUB-OUT-RC TO OUT-RC 
+           WRITE OUT-REC
+           INITIALIZE SUB-OUT-MSG-INFO
+           INITIALIZE SUB-IDX-KEY
            INITIALIZE OUT-REC.
        PRIN-OUT-FILE-END. EXIT.
+      *----
+      *----
+      *----
+       FROM-TO-HANDLE.
+           STRING 'FROM: ' DELIMITED BY SIZE
+                  SUB-NMFROM DELIMITED BY SIZE
+                  SUB-LSTFROM DELIMITED BY SIZE
+                 INTO OUT-FROM
+           END-STRING.
+           STRING 'TO: ' DELIMITED BY SIZE
+                  SUB-NMTO DELIMITED BY SIZE
+                  SUB-LSTTO DELIMITED BY SIZE
+                 INTO OUT-TO
+           END-STRING.
+       FROM-TO-HANDLE-END. EXIT.
+      *----
       *----
        PROGRAM-EXIT.
            IF EXIT-FLAG = 'Y' THEN

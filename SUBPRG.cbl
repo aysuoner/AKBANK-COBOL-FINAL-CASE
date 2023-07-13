@@ -7,7 +7,7 @@
       *DEGISMIS OLABILIR. BUNU NOT OLARAL README.md EKLE!!!!!
       *
       *subprogramin surekli acilip kapanmamasi icin bir sey bul!!!
-      *
+      *TUTAR DEGISKEN ADI DEGISTIR
        PROGRAM-ID.    SUBPRG.
        AUTHOR.        AYSU ONER.
        DATE-WRITTEN.  09/07/2023.
@@ -57,8 +57,12 @@
        01  LN-OUT-MSG-INFO.
            05 LN-OUT-RC            PIC 9(02).
            05 LN-OUT-MSG           PIC X(20).
+           05 LN-NMFROM            PIC X(15).
+           05 LN-NMTO              PIC X(15).
+           05 LN-LSTFROM           PIC X(15).
+           05 LN-LSTTO             PIC X(15).
       *------------
-       PROCEDURE DIVISION USING LN-SUB-IDX-KEY LN-OUT-MSG-INFO.
+       PROCEDURE DIVISION USING LN-OUT-MSG-INFO, LN-SUB-IDX-KEY.
       *----
        FILE-OPEN-CONTROL.
            OPEN I-O IDX-FILE
@@ -115,15 +119,15 @@
            READ IDX-FILE KEY IS IDX-KEY
            NOT INVALID KEY
       *****updateforname
-             MOVE IDX-FIRSTN TO CHARS OF TMP-STR
+             MOVE IDX-FIRSTN TO CHARS OF TMP-STR LN-NMFROM 
              PERFORM REMOVE-SPACES
              PERFORM REPLACING-CHR
-             MOVE CHARS OF RES-STR TO IDX-FIRSTN
+             MOVE CHARS OF RES-STR TO IDX-FIRSTN LN-NMTO
       *****updateforlastname
-             MOVE IDX-LASTN TO CHARS OF TMP-STR
+             MOVE IDX-LASTN TO CHARS OF TMP-STR LN-LSTFROM 
              PERFORM REMOVE-SPACES
              PERFORM REPLACING-CHR
-             MOVE CHARS OF RES-STR TO IDX-LASTN
+             MOVE CHARS OF RES-STR TO IDX-LASTN LN-LSTTO
       *****
            END-READ.
            REWRITE IDX-REC
