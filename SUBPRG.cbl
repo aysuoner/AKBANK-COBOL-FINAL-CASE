@@ -7,11 +7,16 @@
       *DEGISMIS OLABILIR. BUNU NOT OLARAL README.md EKLE!!!!!
       *
       *subprogramin surekli acilip kapanmamasi icin bir sey bul!!!
+      *DOSYA ACIP KAPAMA ICIN INITIAL ATTRIBUTE ARASTIR
       *TUTAR DEGISKEN ADI DEGISTIR
-       PROGRAM-ID.    SUBPRG.
+      *jcl duzelt
+      *RETURN CODE AMAC ARASTIR TAM OGREN
+      * bosluklari kaldirinca zaten update oldu desin.
+      *INITIAL ayarlamak gerekli mi ogren?
+       PROGRAM-ID.    SUBPRG
        AUTHOR.        AYSU ONER.
-       DATE-WRITTEN.  09/07/2023.
-       DATE-COMPILED. 13/07/2023.
+       DATE-WRITTEN.  10/07/2023.
+       DATE-COMPILED. 16/07/2023.
       *------------------------------
        ENVIRONMENT DIVISION.
       *------------------------------
@@ -55,6 +60,7 @@
            05 LN-SUB-IDX-ID     PIC 9(05) COMP-3.
            05 LN-SUB-IDX-DVZ    PIC 9(03) COMP.
        01  LN-OUT-MSG-INFO.
+           05 LN-OUT-RROC-TYP     PIC X(09).
            05 LN-OUT-RC            PIC 9(02).
            05 LN-OUT-MSG           PIC X(20).
            05 LN-NMFROM            PIC X(15).
@@ -81,6 +87,7 @@
       *----
            ENTRY 'READPROC' USING LN-OUT-MSG-INFO, LN-SUB-IDX-KEY.
            PERFORM FILE-OPEN-CONTROL
+           MOVE '-READ-RC:' TO LN-OUT-RROC-TYP
            READ IDX-FILE KEY IS IDX-KEY
            INVALID KEY
              MOVE IDX-ST TO LN-OUT-RC
@@ -95,6 +102,7 @@
       *----
            ENTRY 'WRITPROC' USING LN-OUT-MSG-INFO, LN-SUB-IDX-KEY.
            PERFORM FILE-OPEN-CONTROL
+           MOVE '-WRIT-RC:' TO LN-OUT-RROC-TYP
            READ IDX-FILE KEY IS IDX-KEY
            NOT INVALID KEY
              MOVE 'AYSU           ' TO IDX-FIRSTN
@@ -116,15 +124,16 @@
       *----
            ENTRY 'UPDTPROC' USING LN-OUT-MSG-INFO, LN-SUB-IDX-KEY.
            PERFORM FILE-OPEN-CONTROL
+           MOVE '-UPDT-RC:' TO LN-OUT-RROC-TYP
            READ IDX-FILE KEY IS IDX-KEY
            NOT INVALID KEY
       *****updateforname
-             MOVE IDX-FIRSTN TO CHARS OF TMP-STR LN-NMFROM 
+             MOVE IDX-FIRSTN TO CHARS OF TMP-STR LN-NMFROM
              PERFORM REMOVE-SPACES
              PERFORM REPLACING-CHR
              MOVE CHARS OF RES-STR TO IDX-FIRSTN LN-NMTO
       *****updateforlastname
-             MOVE IDX-LASTN TO CHARS OF TMP-STR LN-LSTFROM 
+             MOVE IDX-LASTN TO CHARS OF TMP-STR LN-LSTFROM
              PERFORM REMOVE-SPACES
              PERFORM REPLACING-CHR
              MOVE CHARS OF RES-STR TO IDX-LASTN LN-LSTTO
@@ -144,6 +153,7 @@
       *----
            ENTRY 'DELTPROC' USING LN-OUT-MSG-INFO, LN-SUB-IDX-KEY.
            PERFORM FILE-OPEN-CONTROL
+           MOVE '-DELT-RC:' TO LN-OUT-RROC-TYP
            DELETE IDX-FILE RECORD
            INVALID KEY
              MOVE IDX-ST TO LN-OUT-RC
