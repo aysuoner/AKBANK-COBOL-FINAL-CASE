@@ -2,6 +2,7 @@
        PROGRAM-ID. HELLO.
        data division.
        WORKING-STORAGE SECTION.
+       01  LOOP-COUNT  PIC 9(02).
        01  STR.
            05 LEN      PIC  9(02).
            05 STR-CHR  PIC  X(80).
@@ -12,7 +13,7 @@
            05 LEN      PIC  9(02).
            05 STR-CHR  PIC  X(80).
        procedure division.
-           move 1 to  I J
+           move 1 to  I J LOOP-COUNT 
            MOVE 22 to len of STR
            MOVE ' W e Lc ome   ay s   u ' TO STR-CHR of str.
            perform until I > len of STR
@@ -23,10 +24,12 @@
               count in K
               with pointer I
             ADD J TO K GIVING J
+           ADD 1 TO LOOP-COUNT
            end-perform
            compute len of result = j - 1
            DISPLAY 'str: ' STR-CHR of result
            DISPLAY len OF RESULT
+           DISPLAY 'LOP: ' LOOP-COUNT 
            goback.
       
 
