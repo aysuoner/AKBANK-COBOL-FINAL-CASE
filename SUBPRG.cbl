@@ -36,7 +36,7 @@
              88 UPDT-SUCCESS                VALUE 1.
              88 UPDT-ALREADY                VALUE 2.
        01  REMOVE-SPACES-VAR.
-           05 SPACE-COUNT          PIC 9(02).
+           05 SPACE-CHECK          PIC 9(02).
            05 TMP-STR.
              10 LEN                PIC  9(02).
              10 CHARS              PIC  X(15).
@@ -117,17 +117,11 @@
            PERFORM FILE-OPEN-CONTROL
            READ IDX-FILE KEY IS IDX-KEY
            NOT INVALID KEY
-      *****updateforname
-             MOVE IDX-FIRSTN TO CHARS OF TMP-STR LN-FIRSTNFROM
+      *****updateforname search and remove space
              PERFORM REMOVE-SPACES
+      *****updateforlastname search and replace e---->i && a---->e
              PERFORM REPLACING-CHR
-             MOVE CHARS OF RES-STR TO IDX-FIRSTN LN-FIRSTNTO
-      *****updateforlastname
-             MOVE IDX-LASTN TO CHARS OF TMP-STR LN-LASTNFROM
-             PERFORM REMOVE-SPACES
-             PERFORM REPLACING-CHR
-             MOVE CHARS OF RES-STR TO IDX-LASTN LN-LASTNTO
-           END-READ.
+           END-READ.                           
            REWRITE IDX-REC
            INVALID KEY
              MOVE IDX-ST TO LN-OUT-RC
@@ -162,7 +156,8 @@
       *----
       *----
        REMOVE-SPACES.
-           MOVE 1 TO I J SPACE-COUNT
+           MOVE IDX-FIRSTN TO CHARS OF TMP-STR LN-FIRSTNFROM
+           MOVE 1 TO I J SPACE-CHECK
            COMPUTE LEN OF TMP-STR = LENGTH OF CHARS OF TMP-STR
            PERFORM UNTIL I > LEN OF TMP-STR
              MOVE 0 TO K
@@ -173,32 +168,35 @@
                WITH POINTER I
              END-UNSTRING
             IF J = 1
-              MOVE K TO SPACE-COUNT
+              MOVE K TO SPACE-CHECK
             END-IF
              ADD J TO K GIVING J
              PERFORM UPDATE-CTRL
-           END-PERFORM.
+           END-PERFORM
+           MOVE CHARS OF RES-STR TO IDX-FIRSTN LN-FIRSTNTO.
        REMOVE-SPACES-END. EXIT.
       *----
       *----
-       REPLACING-CHR.
-           INSPECT CHARS OF RES-STR
-           REPLACING ALL 'e' BY 'i',
-                         'E' BY 'I',
-                         'a' BY 'e',
-                         'A' BY 'E'.
-       REPLACING-CHR-END. EXIT.
-      *----
        UPDATE-CTRL.
            COMPUTE LEN OF RES-STR = J - 1
-           IF (LEN OF RES-STR IS NOT EQUAL TO SPACE-COUNT)
+           IF (LEN OF RES-STR IS NOT EQUAL TO SPACE-CHECK)
                  SET UPDT-SUCCESS TO TRUE
-           END-IF
-           IF (LEN OF RES-STR IS EQUAL TO SPACE-COUNT
-                AND NOT UPDT-SUCCESS)
+           ELSE
                 SET UPDT-ALREADY TO TRUE
            END-IF.
        UPDATE-CTRL-END. EXIT.
+      *----
+      *----
+       REPLACING-CHR.
+           MOVE IDX-LASTN TO CHARS OF TMP-STR LN-LASTNFROM
+           INSPECT CHARS OF TMP-STR
+           REPLACING ALL 'e' BY 'i',
+                         'E' BY 'I',
+                         'a' BY 'e',
+                         'A' BY 'E'
+           MOVE CHARS OF TMP-STR TO IDX-LASTN LN-LASTNTO.
+       REPLACING-CHR-END. EXIT.
+      *----
       *----
        EXIT-SUBPROG.
            IF EXIT-PROG
