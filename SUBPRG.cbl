@@ -64,7 +64,8 @@
        FILE-OPEN-CONTROL.
            OPEN I-O IDX-FILE
            IF NOT IDX-SUCCESS
-             DISPLAY '.VSAM FILE CANNOT OPEN: ' IDX-ST
+             DISPLAY '.VSAM FILE CANNOT OPEN: ' 
+             DISPLAY 'IDX-ST: ' IDX-ST
              SET EXIT-PROG TO TRUE
              MOVE IDX-ST TO RETURN-CODE
              PERFORM EXIT-SUBPROG
@@ -78,13 +79,12 @@
            PERFORM FILE-OPEN-CONTROL
            READ IDX-FILE KEY IS IDX-KEY
            INVALID KEY
-             MOVE IDX-ST TO LN-OUT-RC
              MOVE ' RECORD NOT FOUND' TO LN-OUT-MSG
            NOT INVALID KEY
-             MOVE IDX-ST TO LN-OUT-RC
              MOVE ' RECORD READ' TO LN-OUT-MSG
            END-READ.
            MOVE '-READ-RC:' TO LN-OUT-RROC-TYP
+           MOVE IDX-ST TO LN-OUT-RC
            SET EXIT-PROG TO TRUE.
            PERFORM EXIT-SUBPROG.
       *----
@@ -101,13 +101,12 @@
            END-READ
            WRITE IDX-REC
            INVALID KEY
-              MOVE IDX-ST TO LN-OUT-RC
               MOVE ' DUPLICATE RECORD' TO LN-OUT-MSG
            NOT INVALID KEY
-              MOVE IDX-ST TO LN-OUT-RC
               MOVE ' NEW RECORD ADDED' TO LN-OUT-MSG
            END-WRITE.
            MOVE '-WRIT-RC:' TO LN-OUT-RROC-TYP
+           MOVE IDX-ST TO LN-OUT-RC
            SET EXIT-PROG TO TRUE.
            PERFORM EXIT-SUBPROG.
       *----
@@ -124,10 +123,8 @@
            END-READ.                           
            REWRITE IDX-REC
            INVALID KEY
-             MOVE IDX-ST TO LN-OUT-RC
              MOVE ' RECORD NOT FOUND' TO LN-OUT-MSG
            NOT INVALID KEY
-             MOVE IDX-ST TO LN-OUT-RC
              IF UPDT-ALREADY
                MOVE ' ALREADY UPDATED' TO LN-OUT-MSG
              ELSE
@@ -135,6 +132,7 @@
              END-IF
            END-REWRITE.
            MOVE '-UPDT-RC:' TO LN-OUT-RROC-TYP
+           MOVE IDX-ST TO LN-OUT-RC
            SET EXIT-PROG TO TRUE.
            PERFORM EXIT-SUBPROG.
       *----
@@ -142,15 +140,14 @@
            ENTRY 'DELTPROC' USING LN-OUT-MSG-INFO, LN-SUB-IDX-KEY.
       *-------------------------------------------------
            PERFORM FILE-OPEN-CONTROL
-           DELETE IDX-FILE RECORD
+           DELETE IDX-FILE RECORD 
            INVALID KEY
-             MOVE IDX-ST TO LN-OUT-RC
              MOVE ' RECORD NOT FOUND' TO LN-OUT-MSG
            NOT INVALID KEY
-             MOVE IDX-ST TO LN-OUT-RC
              MOVE ' RECORD DELETED' TO LN-OUT-MSG
            END-DELETE.
            MOVE '-DELT-RC:' TO LN-OUT-RROC-TYP
+           MOVE IDX-ST TO LN-OUT-RC
            SET EXIT-PROG TO TRUE.
            PERFORM EXIT-SUBPROG.
       *----
@@ -170,9 +167,9 @@
             IF J = 1
               MOVE K TO SPACE-CHECK
             END-IF
-             ADD J TO K GIVING J
-             PERFORM UPDATE-CTRL
+             ADD K to J
            END-PERFORM
+           PERFORM UPDATE-CTRL
            MOVE CHARS OF RES-STR TO IDX-FIRSTN LN-FIRSTNTO.
        REMOVE-SPACES-END. EXIT.
       *----
@@ -200,7 +197,6 @@
       *----
        EXIT-SUBPROG.
            IF EXIT-PROG
-               DISPLAY IDX-ID IDX-DVZ
       *         CLOSE IDX-FILE
                GOBACK
            END-IF.
@@ -226,7 +222,7 @@
       *subprogramin surekli acilip kapanmamasi icin bir sey bul!!!
       *DOSYA ACIP KAPAMA ICIN INITIAL ATTRIBUTE ARASTIR
       *TUTAR DEGISKEN ADI DEGISTIR
-      *jcl duzelt
+      *jcl duzelt dene!!!!!!
       *RETURN CODE AMAC ARASTIR TAM OGREN
       * bosluklari kaldirinca zaten update oldu desin.
       *INITIAL ayarlamak gerekli mi ogren?
