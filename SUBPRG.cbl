@@ -88,11 +88,11 @@
        FILE-OPEN-CONTROL-END. EXIT.
       *====
       *================================================================*
-      *>   ENTRY point ==> Sub-programda alternatif bir giris noktasi 
-      *>     olusturur. Ust-programda bu ENTRY point belirtilirse
-      *>     alt-program direkt bu ENRTY noktasindan baslar.
-      *>   Boylelıkle alt-programa belirli bir .Vsam isi icin 
-      *>   gelinir ve tekrar ust-programa donulur.
+      *>   ENTRY point ==> Sub-programda alternatif bir giris noktasi <*
+      *>     olusturur. Ust-programda bu ENTRY point belirtilirse     <*
+      *>     alt-program direkt bu ENRTY noktasindan baslar.          <*
+      *>   Boylelıkle alt-programa belirli bir .Vsam isi icin         <*
+      *>   gelinir ve tekrar ust-programa donulur.                    <*
       *================================================================*
            ENTRY 'READPROC' USING LN-OUT-MSG-INFO, LN-SUB-IDX-KEY.
       *----------------------------------------------------------------*
@@ -109,10 +109,10 @@
            PERFORM EXIT-SUBPROG.
       *----
       *----------------------------------------------------------------*
-      *>   Once READ ile .VSAM'a yazdirilacak KEY'i ariyorum.
-      *>    Eger boyle bir key yoksa yeni olusturulacak RECORD'a
-      *>    atamalari yapiyorum. Boylelikle DUPLICATE RECORD direkt 
-      *>    WRITE statement'a atliyor.
+      *>   Once READ ile .VSAM'a yazdirilacak KEY'i ariyorum.         <*
+      *>    Eger boyle bir key yoksa yeni olusturulacak RECORD'a      <*
+      *>    atamalari yapiyorum. Boylelikle DUPLICATE RECORD direkt   <*
+      *>    WRITE statement'a atliyor.                                <*
       *----------------------------------------------------------------*
            ENTRY 'WRITPROC' USING LN-OUT-MSG-INFO, LN-SUB-IDX-KEY.
       *----------------------------------------------------------------*
@@ -136,10 +136,10 @@
            PERFORM EXIT-SUBPROG.
       *----
       *----------------------------------------------------------------*
-      *>   Odev UPDATE yapilirken isimde space varsa kaldirmamizi,
-      *>    soyisimde ise e ===> i VE a ===> e donusumunu istemekte.
-      *>   Ayni zamanda isimde bosluk yoksa ALREADY UPDATED 
-      *>    bilgisi verilmelidir.
+      *>   Odev UPDATE yapilirken isimde space varsa kaldirmamizi,    <*
+      *>    soyisimde ise e ===> i VE a ===> e donusumunu istemekte.  <*
+      *>   Ayni zamanda isimde bosluk yoksa ALREADY UPDATED           <*
+      *>    bilgisi verilmelidir.                                     <*
       *----------------------------------------------------------------*
            ENTRY 'UPDTPROC' USING LN-OUT-MSG-INFO, LN-SUB-IDX-KEY.
       *----------------------------------------------------------------*
@@ -188,7 +188,7 @@
            PERFORM UNTIL I > LEN OF TMP-STR  *>stringi sonuna kadar oku
              MOVE 0 TO K
              UNSTRING CHARS OF TMP-STR
-               DELIMITED BY ' '     *> her boslukta res-str'nin J'inden
+               DELIMITED BY ' '     *> her boslukta res-str'nin J'sinden
                INTO CHARS OF RES-STR(J:)         *> itibaren ekleme yap
                COUNT IN K
                WITH POINTER I
@@ -223,7 +223,7 @@
            MOVE CHARS OF TMP-STR TO IDX-LASTN LN-LASTNTO.
        REPLACING-CHR-END. EXIT.
       *----
-      *----------------------------------------------------------------*
+       *>   SUB-PROGRAM'dan cikis fonksiyonu
        EXIT-SUBPROG.
            IF EXIT-PROG
                GOBACK
