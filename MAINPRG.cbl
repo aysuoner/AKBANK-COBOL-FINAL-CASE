@@ -22,7 +22,7 @@
       *>   INP-FILE ==> input olarak kullanilan dosyanin icindeki     <*
       *>                veriler tanimlanir.                           <*
       *>   OUT-FILE ==> program sonunda olusturulacak out dosyasinin  <*
-      *>                icinde bulunacak verileri tanimlar.           <*
+      *>                verileri tanimlanir.                          <*
       *-----------------------------------------------------------------
        FILE SECTION.
        FD  INP-FILE RECORDING MODE F.
