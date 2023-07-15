@@ -4,11 +4,10 @@
        AUTHOR.                    AYSU ONER.
        DATE-WRITTEN.              10/07/2023.
        DATE-COMPILED.             16/07/2023.
-
       ******************************************************************
        ENVIRONMENT DIVISION.
       *----------------------------------------------------------------*
-      *> External data-setler ile internal dosyalar iliskilendirilir. <*
+      *> External data-setler ile COBOL dosyalari iliskilendirilir.   <*
       *----------------------------------------------------------------*
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.
@@ -47,9 +46,8 @@
              10 OUT-MSG           PIC X(20).
              10 OUT-FROM          PIC X(36).
              10 OUT-TO            PIC X(34).
-      *----------------------------------------------------------------*
+      *
        WORKING-STORAGE SECTION.
-      *----------------------------------------------------------------*
               *>*> Dosya kontrollerini tutan Data-Group <*<*
        01  FILE-FLAGS.
            05 INP-ST              PIC 9(02).
@@ -99,7 +97,7 @@
        FILE-OPEN-CONTROL-END. EXIT.
       *----
       *----------------------------------------------------------------*
-      *>   Input-file, EOF'a kadar okunması icin donguye alinir       <*
+      *>   Input-file, EOF'a kadar okunmasi icin donguye alinir       <*
       *>    ANCAK bos input dosyasinin donguye girmemesi icin         <*
       *>    basta READ INP-FILE islemi gerceklestirilir.              <*
       *----------------------------------------------------------------*

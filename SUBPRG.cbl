@@ -11,7 +11,7 @@
        DATE-COMPILED.         16/07/2023.
       ******************************************************************
        ENVIRONMENT DIVISION.
-      *----------------------------------------------------------------*
+      *
        INPUT-OUTPUT SECTION.
        FILE-CONTROL.
            SELECT IDX-FILE    ASSIGN TO  IDXFILE
@@ -34,7 +34,7 @@
            05 IDX-AMOUNT           PIC 9(13)V99 COMP-3.
       *
        WORKING-STORAGE SECTION.
-             *>*> Dosya ve Process kontollerini tutan Data-Group <*<*
+            *>*> Dosya ve Process kontrollerini tutan Data-Group <*<*
        01  FILE-FLAGS.
            05 IDX-ST               PIC 9(02).
              88 IDX-SUCCESS                 VALUE 00 97.
@@ -178,29 +178,30 @@
            MOVE IDX-ST TO LN-OUT-RC
            SET EXIT-PROG TO TRUE.
            PERFORM EXIT-SUBPROG.
-      *----
-      *>   UTILITY FUNCTIONS OF UPDTPROC *<
+      *
+            *>   UTILITY FUNCTIONS OF UPDTPROC *<
       *----------------------------------------------------------------*
        REMOVE-SPACES.
            MOVE IDX-FIRSTN TO CHARS OF TMP-STR LN-FIRSTNFROM
            MOVE 1 TO I J SPACE-CHECK
            COMPUTE LEN OF TMP-STR = LENGTH OF CHARS OF TMP-STR
-           PERFORM UNTIL I > LEN OF TMP-STR
+           PERFORM UNTIL I > LEN OF TMP-STR  *>stringi sonuna kadar oku
              MOVE 0 TO K
              UNSTRING CHARS OF TMP-STR
-               DELIMITED BY ' '
-               INTO CHARS OF RES-STR(J:)
+               DELIMITED BY ' '     *> her boslukta res-str'nin J'inden
+               INTO CHARS OF RES-STR(J:)         *> itibaren ekleme yap
                COUNT IN K
                WITH POINTER I
              END-UNSTRING
             IF J = 1
-              MOVE K TO SPACE-CHECK
-            END-IF
+              MOVE K TO SPACE-CHECK *> update-crtl icin ilk res-str
+            END-IF                      *> degerinin uzunlugu alinir
              ADD K to J
            END-PERFORM
            PERFORM UPDATE-CTRL
            MOVE CHARS OF RES-STR TO IDX-FIRSTN LN-FIRSTNTO.
        REMOVE-SPACES-END. EXIT.
+      *----
       *----------------------------------------------------------------*
        UPDATE-CTRL.
            COMPUTE LEN OF RES-STR = J - 1
@@ -210,6 +211,7 @@
                 SET UPDT-ALREADY TO TRUE
            END-IF.
        UPDATE-CTRL-END. EXIT.
+      *----
       *----------------------------------------------------------------*
        REPLACING-CHR.
            MOVE IDX-LASTN TO CHARS OF TMP-STR LN-LASTNFROM
@@ -221,10 +223,9 @@
            MOVE CHARS OF TMP-STR TO IDX-LASTN LN-LASTNTO.
        REPLACING-CHR-END. EXIT.
       *----
-      *----
+      *----------------------------------------------------------------*
        EXIT-SUBPROG.
            IF EXIT-PROG
-      *         CLOSE IDX-FILE
                GOBACK
            END-IF.
        EXIT-SUBPROG-END. EXIT.
