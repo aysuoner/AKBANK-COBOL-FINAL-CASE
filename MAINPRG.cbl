@@ -2,8 +2,8 @@
        IDENTIFICATION DIVISION.
        PROGRAM-ID.                MAINPRG.
        AUTHOR.                    AYSU ONER.
-       DATE-COMPILED.             16/07/2023.
        DATE-WRITTEN.              10/07/2023.
+       DATE-COMPILED.             16/07/2023.
 
       ******************************************************************
        ENVIRONMENT DIVISION.
