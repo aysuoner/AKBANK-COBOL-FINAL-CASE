@@ -1,4 +1,6 @@
 ## AKBANK COBOL BOOTCAMP - Final Case
+---
+
 
 _**AKBANK COBOL bootcamp'i kapsamında yapmış olduğum bu proje, basit bir \`file handling\` çalışmasıdır.**_   
  
@@ -27,6 +29,9 @@ _**AKBANK COBOL bootcamp'i kapsamında yapmış olduğum bu proje, basit bir \`f
 | CRTINFO | Creates input for VSAM file |
 | CRTVSAM | Creates Vsam file and indexed records |
 | CRTMAIN | JCL for main cobol pgm |
+
+
+
 
 
 ## _PROJE HAKKINDA_
@@ -133,6 +138,8 @@ _Burada belirtilen key-name bir dosyadaki her bir recordu benzersiz sekilde tani
 `STATUS`  
 _Dosya islemlerinde dosyanin ne sekilde acildigina dair return-code'lari tutar._
 
+>.
+
 ![](https://33333.cdn.cke-cs.com/kSW7V9NHUXugvhoQeFaf/images/cbab44b5529a9b8c9981951448826193bfd7958d41f0963b.png)
 
 `DATA DIVISION.`  
@@ -171,10 +178,14 @@ _numaric veriler COMP. formatinda bellekte pure-binary seklinde depolanir. Degis
 
 _Ondalikli sayilari tutabilir ama binary seklinde tutugu icin yazdirilirken tamsayi haline gelir._  
 
-![](https://33333.cdn.cke-cs.com/kSW7V9NHUXugvhoQeFaf/images/d1c8b54bdd9ac86b3c620c4180b8d752370f7fdf4bc33719.png)
+![](https://33333.cdn.cke-cs.com/kSW7V9NHUXugvhoQeFaf/images/bc1efb97bbe6a365687d06e87d6febf0fca2dd3ed1ecb33e.png)
+
+  
+ 
 
 `ENTRY point`  
 _Sub-programda alternatif bir giris noktasi olusturur. Ust-programda bu ENTRY point belirtilirse alt-program direkt bu ENRTY noktasindan baslar. Boylelikle alt programa belirli bir .Vsam isi icin gelinir ve tekrar ust-programa donulur._
+
 
 `INVALID KEY - NOT INVALID KEY`  
 _READ,WRITE, REWRITE, DELETE yapilan recordların durumunu kontrol etmek icin kullanilir.  Belirtilen key'e sahip bir record bulunamazsa veya islem sirasinda bir hata gerceklesirse INVALID KEY'de belirtilen durum gerceklesir. Aksi halde NOT INVALID KEY DURUMU gerceklesir._
