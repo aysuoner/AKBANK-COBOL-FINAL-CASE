@@ -229,12 +229,3 @@
                GOBACK
            END-IF.
        EXIT-SUBPROG-END. EXIT.
-
-      *NOT: INPFILE'DA BIR DEGISIKLIK YAPTIKTAN SONRA MAIN'I CALISTIRDI
-      *GINDA ISTEDIGIN VERIYI ALAMIYORSAN ONCE VSAM DOSYASINI SUBMIT ET
-      *CUNKU BIR ONCEKI WRITE DELT- UPDATE ISLEMI ILE ILK VSAM
-      *DEGISMIS OLABILIR. BUNU NOT OLARAL README.md EKLE!!!!!
-      *
-      *     jcl duzelt dene!!!!!!
-      *     tum jclleri gozden gecir
-      *    program RETURN CODE gerekli mi arastir
