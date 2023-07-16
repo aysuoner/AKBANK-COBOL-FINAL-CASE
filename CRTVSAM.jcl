@@ -5,7 +5,6 @@
 //SYSIN DD *
     DELETE Z95610.VSAM.AA CLUSTER PURGE
     IF LASTCC LE 08 THEN SET MAXCC = 00
-
         DEF CL ( NAME(Z95610.VSAM.AA)         -
                 FREESPACE( 20 20 )            -
                 SHR( 2,3 )                    -
