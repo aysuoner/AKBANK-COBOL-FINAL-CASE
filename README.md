@@ -52,7 +52,7 @@ _aşağıdaki dosyalara verilen sıra ile_ `SUBMIT JOB` _uygulanmalıdır._
 
 ---
 
-![](https://33333.cdn.cke-cs.com/kSW7V9NHUXugvhoQeFaf/images/7635ddeb94bde8fdae1f33fb10b0192282695babf96773c9.png)
+![](https://33333.cdn.cke-cs.com/kSW7V9NHUXugvhoQeFaf/images/b66be986527b77e089e2d7c974e2df9deb91ccf0adb957ae.png)
 
 `INPUT-OUTPUT SECTION.`  
   _Harici ortam ile cobol programi arasindaki veri iletimi burada yapilir. input-ouptut dosyalar cobol programi ile burada iliskilendirilir._
@@ -79,3 +79,57 @@ _Recordlarin kullanicinin belirttigi sekilde okunmasini ve yazilmasini saglar. B
 _Burada belirtilen key-name bir dosyadaki her bir recordu benzersiz sekilde tanimlayan bir kombinasyondur. RECORD KEY clause'da tanimlanan key-name ile kayitlara dogrudan erismek mumkun hale gelir._
 
 > Sonuc olarak indexed tutulan verileri keyler araciligiyla bulmak, yeni kayitlar eklemek, silmek ve guncellemek mumkundur.
+
+`STATUS`  
+_Dosya islemlerinde dosyanin ne sekilde acildigina dair return-code'lari tutar._
+
+![](https://33333.cdn.cke-cs.com/kSW7V9NHUXugvhoQeFaf/images/cbab44b5529a9b8c9981951448826193bfd7958d41f0963b.png)
+
+`DATA DIVISION.`  
+_Program tarafindan islenecek tum verileri tanimlamak icin kullanilan divisiondir._  
+
+`FILE SECTION.`  
+_Harici olarak depolanan verilerin tanimlandigi sectiondur._
+
+`_WORKING-STORAGE SECTION._`  
+_Dahili verilen tanimlandigi section. Harici bir dosyanin parcasi olmayan, programin isleyisinde kullanilan gecici tüm degiskenlerin tanimlandigi yerdir._
+
+`FD file-name clause`  
+_Belirtilen file-name'in ozelliklerinin tanimlanmaya baslanacagi belirtir._
+
+RECORDING MODE      Dosyadaki kayitlarin uzunluk tipini belirtir.  
+`RECORDING MODE F`   Sabit uzunlukta kayit dosyalari icin  
+`RECORDING MODE V`   Degisken uzunlukta kayit dosyalari icin kullanılır.
+
+> VSAM dosyalarinda  RECORDING MODE belirtilmez.
+
+`COMP-3`  
+_numeric verileri Binary-Coded-Decimal formatinda_  
+_depolar.Ondalikli sayilar bu formatta yapisi bozulmadan saklanir. Bu formatta her rakam yarim byte(4 bit) seklinde depolanir. Bu yuzden 1 byte'a 1 degil 2 rakam depolanir._  
+_orn: 126 sayisi comp-3 formatinda su sekilde tutulur._
+
+`0001  0010  0110    1111`  
+`(1)   (2)   (6)  (fill area)`
+
+\_Boylelikle degiskenin size'i azalmis olur. Size'i isle (len + 1) / 2 seklinde hesaplanir.
+
+`COMP`  
+_numaric veriler COMP. formatinda bellekte pure-binary seklinde depolanir. Degiskendeki basamak sayisina gore depolama alani degisir. onegin:_
+
+> _4 basamak 2byte yer kaplarken_  
+> _5 basamak 4byte yer kaplar_
+
+_Ondalikli sayilari tutabilir ama binary seklinde tutugu icin yazdirilirken tamsayi haline gelir._  
+ 
+
+![valid-invalid-key](https://33333.cdn.cke-cs.com/kSW7V9NHUXugvhoQeFaf/images/909cb72a2271c75ed1b2ff703753044c8606080e56837240.png)
+
+  
+`ENTRY point`  
+_Sub-programda alternatif bir giris noktasi olusturur. Ust-programda bu ENTRY point belirtilirse alt-program direkt bu ENRTY noktasindan baslar. Boylelikle alt programa belirli bir .Vsam isi icin gelinir ve tekrar ust-programa donulur._ 
+
+`INVALID KEY - NOT INVALID KEY`  
+_READ,WRITE, REWRITE, DELETE yapilan recordların durumunu kontrol etmek icin kullanilir.  Belirtilen key'e sahip bir record bulunamazsa veya islem sirasinda bir hata gerceklesirse INVALID KEY'de belirtilen durum gerceklesir. Aksi halde NOT INVALID KEY DURUMU gerceklesir._  
+  
+`PROGRAM-ID. SUBPRG IS INITIAL`  
+ _Bir alt-programın initial olarak belirlenmesi, sub-programdan cikilirken acilan tum dahili dosyalarin otomatik olarak kapatilmasini ve program her çağırıldığında kullanılan değerlerin başlangıç durumuna getirilmesini sağlar. Boylelikle alt-programdan çıkarken açtığım dosyaları CLOSE lie kapatmaya gerek kalmamaktadir._  
