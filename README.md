@@ -1,11 +1,13 @@
 ## AKBANK COBOL BOOTCAMP - Final Case
 
-### _PROJENIN İÇERİĞİ_
+_**AKBANK COBOL bootcamp'i kapsamında yapmış olduğum bu proje, basit bir \`file handling\` çalışmasıdır.**_   
+ 
+
+## _PROJENIN ICERIGI_
 
 ---
 
-AKBANK COBOL bootcamp'i kapsamında yapmış olduğum bu proje, basit bir  
-`file handling` çalışmasıdır. Bu projede aşağıdaki dosyalar üzerinde READ, WRITE, UPDATE, DELETE gibi çeşitli işlemler gerçekleştirmektedir.
+##### INPUT && I- O && OUTPUT FILES
 
 | SOURCE | TYPE |
 | --- | --- |
@@ -13,7 +15,25 @@ AKBANK COBOL bootcamp'i kapsamında yapmış olduğum bu proje, basit bir
 | Z95610.VSAM.AA | _i-o file_ |
 | Z95610.QSAM.ZZ | _output file_ |
 
-<table><tbody><tr><td><strong>COBOL FILE</strong></td><td><strong>&nbsp; &nbsp;FEATURE</strong></td></tr><tr><td>MAINPRG.cbl</td><td><i>&nbsp;Main cobol program</i></td></tr><tr><td>SUBPRG.cbl</td><td><i>Sub cobol program</i></td></tr></tbody></table>
+##### COBOL FILES
+
+<table><tbody><tr><td><strong>COBOL FILE</strong></td><td><strong>&nbsp; &nbsp;FEATURE</strong></td></tr><tr><td>MAINPRG.cbl</td><td><i>&nbsp;Main cobol program=&gt;. Z95610.QSAM.INP &nbsp;dosyası burada okunur.</i><br><i>.Vsam dosyasında istenilen processin gerceklesmesi icin sub-program cagilir. Vsam dosyalarının islenmesinden dogan mesajlar &nbsp;Z95610.QSAM.ZZ dosyasına yazdırılır.</i></td></tr><tr><td>SUBPRG.cbl</td><td><i>Sub cobol program=&gt; .VSAM dosyası lie ilgili tum processler bu alt-programda gerceklesir.</i></td></tr></tbody></table>
+
+##### JCL-FILES
+
+| JCL-FILE | FEATURE |
+| --- | --- |
+| CRTINPID | Creates input for process type |
+| CRTINFO | Creates input for VSAM file |
+| CRTVSAM | Creates Vsam file and indexed records |
+| CRTMAIN | JCL for main cobol pgm |
+
+
+## _PROJE HAKKINDA_
+
+---
+
+AKBANK COBOL bootcamp'i kapsamında yapmış olduğum bu proje, basit bir `file handling` çalışmasıdır. Bu projede aşağıdaki dosyalar üzerinde READ, WRITE, UPDATE, DELETE gibi çeşitli işlemler gerçekleştirmektedir.
 
 Öncelikte QSAM.INP dosyası aşağıdaki gibi gözükmektedir.
 
@@ -31,24 +51,54 @@ Bu dosyadaki ilk karakter .VSAM dosyasına uygulanacak `process-type`
 
 sonrasında gelen rakamlar ise uygulanacak olan processin VSAM dosyasındaki hangi record'a uygulanacağını belirten `RECORD-KEY` 'dir.
 
-.INP dosyasındaki veriler kullanılarak VSAM dosyasındaki kayıtlar için belirtilen process türlerinden biri `'R' ‘W’ ‘U’ ‘D’` .VSAM'daki kayda uygulanır.
+.INP dosyasındaki veriler kullanılarak VSAM dosyasındaki kayıtlar için belirtilen process türlerinden biri `'R' ‘W’ ‘U’ ‘D’` .VSAM'daki record'a uygulanır.
+
+
+## _Projede Istenilen Ozellikler_
+
+---
+
+**R63441834** \==> `-R-` ise belirtilen record .VSAM'dan okumaya calis. Output file'a okundu/okunmadı bilgisini yaz.
+
+**W63441834** \=> `-W-` ise belirtilen keyde bir record bulunmuyorsa Write lie buraya yeni bir kayıt ekle. Eger bu record key dol ise output file'a \`DUPLICATE RECORD\` mesajını ver.  
+
+**D20002949** => `-D-` ise belirtilen keyde bir record bulunuyorsa bu recordu sil aksi halde   
+
+\`RECORD NOT FOUND\` mesajını ver.  
+
+**U20002949** => `-U-` ise belirtilen keyde bir record bulunuyorsa bu recordu bu recordun
+
+> 1.  First-name'deki boslukları kaldir. Eger bosluk yoksa `ALREADY UPDATED` mesajını ver.
+> 2.  Lastname'de vara ‘E’ harflerini ‘I’ harfine ve 'A' harflerini ‘e’ harfine cevir.
+
+---
 
 .VSAM dosyasındaki kayıtların işleme alınmasından sonra ise bu işlemlerin başarılı / başarsız olduğu bilgilerinin yazıldığı bir .QSAM.ZZ adında output file oluşturulur.  
 output file'a çıktılar aşağıdaki gibi yazdırılmaktadır.
 
-### PROJENIN ÇALIŞTIRILMASI
+```plaintext
+63441834-READ-RC:00 RECORD READ
+63441834-WRIT-RC:22 DUPLICATE RECORD
+20002949-READ-RC:00 RECORD READ
+20002949-DELT-RC:00 RECORD DELETED
+20002949-READ-RC:23 RECORD NOT FOUND
+20002949-UPDT-RC:23 RECORD NOT FOUND
+```
+
+## _PROJENIN CALISTIRILMASI_
 
 ---
 
 _Projenin başarılı bir şekilde çalıştırılması için yapılması gerekenler:_  
 _aşağıdaki dosyalara verilen sıra ile_ `SUBMIT JOB` _uygulanmalıdır._
 
-> 1.  CRTINFO.jcl
-> 2.  CRTINPID.jcl
-> 3.  CRTVSAM.jcl
-> 4.  CRTMAIN.jcl
+1.  CRTINFO.jcl
+2.  CRTINPID.jcl
+3.  CRTVSAM.jcl
+4.  CRTMAIN.jcl  
+     
 
-### PROJEDE KULLANILAN BAZI TERİMLER
+## _KULLANILAN BAZI COBOL TERIMLERI_
 
 ---
 
@@ -119,18 +169,15 @@ _numaric veriler COMP. formatinda bellekte pure-binary seklinde depolanir. Degis
 > _4 basamak 2byte yer kaplarken_  
 > _5 basamak 4byte yer kaplar_
 
-_Ondalikli sayilari tutabilir ama binary seklinde tutugu icin yazdirilirken tamsayi haline gelir._  
- 
-
+_Ondalikli sayilari tutabilir ama binary seklinde tutugu icin yazdirilirken tamsayi haline gelir._  
 
 ![](https://33333.cdn.cke-cs.com/kSW7V9NHUXugvhoQeFaf/images/d1c8b54bdd9ac86b3c620c4180b8d752370f7fdf4bc33719.png)
 
-  
 `ENTRY point`  
-_Sub-programda alternatif bir giris noktasi olusturur. Ust-programda bu ENTRY point belirtilirse alt-program direkt bu ENRTY noktasindan baslar. Boylelikle alt programa belirli bir .Vsam isi icin gelinir ve tekrar ust-programa donulur._ 
+_Sub-programda alternatif bir giris noktasi olusturur. Ust-programda bu ENTRY point belirtilirse alt-program direkt bu ENRTY noktasindan baslar. Boylelikle alt programa belirli bir .Vsam isi icin gelinir ve tekrar ust-programa donulur._
 
 `INVALID KEY - NOT INVALID KEY`  
-_READ,WRITE, REWRITE, DELETE yapilan recordların durumunu kontrol etmek icin kullanilir.  Belirtilen key'e sahip bir record bulunamazsa veya islem sirasinda bir hata gerceklesirse INVALID KEY'de belirtilen durum gerceklesir. Aksi halde NOT INVALID KEY DURUMU gerceklesir._  
-  
+_READ,WRITE, REWRITE, DELETE yapilan recordların durumunu kontrol etmek icin kullanilir.  Belirtilen key'e sahip bir record bulunamazsa veya islem sirasinda bir hata gerceklesirse INVALID KEY'de belirtilen durum gerceklesir. Aksi halde NOT INVALID KEY DURUMU gerceklesir._
+
 `PROGRAM-ID. SUBPRG IS INITIAL`  
- _Bir alt-programın initial olarak belirlenmesi, sub-programdan cikilirken acilan tum dahili dosyalarin otomatik olarak kapatilmasini ve program her çağırıldığında kullanılan değerlerin başlangıç durumuna getirilmesini sağlar. Boylelikle alt-programdan çıkarken açtığım dosyaları CLOSE lie kapatmaya gerek kalmamaktadir._  
+_Bir alt-programın initial olarak belirlenmesi, sub-programdan cikilirken acilan tum dahili dosyalarin otomatik olarak kapatilmasini ve program her çağırıldığında kullanılan değerlerin başlangıç durumuna getirilmesini sağlar. Boylelikle alt-programdan çıkarken açtığım dosyaları CLOSE lie kapatmaya gerek kalmamaktadir._
