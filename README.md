@@ -6,9 +6,11 @@ AKBANK COBOL bootcamp'i kapsamında yapmış olduğum bu proje, basit bir
 
 | SOURCE | TYPE |
 | --- | --- |
-| **Z95610.QSAM.INP** | INPUT FILE |
-| **Z95610.VSAM.AA** | INPUT FILE |
-| **Z95610.QSAM.ZZ** | OUTPUT FILE |
+| Z95610.QSAM.INP | _input file_ |
+| Z95610.VSAM.AA | _i-o file_ |
+| Z95610.QSAM.ZZ | _output file_ |
+
+<table><tbody><tr><td><strong>COBOL FILE</strong></td><td><strong>&nbsp; &nbsp;FEATURE</strong></td></tr><tr><td>MAINPRG.cbl</td><td><i>&nbsp;Main cobol program</i></td></tr><tr><td>SUBPRG.cbl</td><td><i>Sub cobol program</i></td></tr></tbody></table>
 
 Öncelikte QSAM.INP dosyası aşağıdaki gibi gözükmektedir.
 
