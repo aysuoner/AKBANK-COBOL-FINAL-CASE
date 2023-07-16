@@ -122,7 +122,8 @@ _numaric veriler COMP. formatinda bellekte pure-binary seklinde depolanir. Degis
 _Ondalikli sayilari tutabilir ama binary seklinde tutugu icin yazdirilirken tamsayi haline gelir._  
  
 
-![valid-invalid-key](https://33333.cdn.cke-cs.com/kSW7V9NHUXugvhoQeFaf/images/909cb72a2271c75ed1b2ff703753044c8606080e56837240.png)
+
+![](https://33333.cdn.cke-cs.com/kSW7V9NHUXugvhoQeFaf/images/d1c8b54bdd9ac86b3c620c4180b8d752370f7fdf4bc33719.png)
 
   
 `ENTRY point`  
