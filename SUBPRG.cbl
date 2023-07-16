@@ -91,7 +91,7 @@
       *>   ENTRY point ==> Sub-programda alternatif bir giris noktasi <*
       *>     olusturur. Ust-programda bu ENTRY point belirtilirse     <*
       *>     alt-program direkt bu ENRTY noktasindan baslar.          <*
-      *>   Boylelıkle alt-programa belirli bir .Vsam isi icin         <*
+      *>   Boylelikle alt-programa belirli bir .Vsam isi icin         <*
       *>   gelinir ve tekrar ust-programa donulur.                    <*
       *================================================================*
            ENTRY 'READPROC' USING LN-OUT-MSG-INFO, LN-SUB-IDX-KEY.
@@ -118,7 +118,7 @@
       *----------------------------------------------------------------*
            PERFORM FILE-OPEN-CONTROL
            READ IDX-FILE KEY IS IDX-KEY
-           NOT INVALID KEY
+           INVALID KEY
              MOVE 'AYSU           ' TO IDX-FIRSTN
              MOVE 'ONER           ' TO IDX-LASTN
              MOVE '1995126'         TO IDX-JUL
