@@ -71,10 +71,10 @@ sonrasında gelen rakamlar ise uygulanacak olan processin VSAM dosyasındaki han
 
 \`RECORD NOT FOUND\` mesajını ver.  
 
-**U20002949** => `-U-` ise belirtilen keyde bir record bulunuyorsa bu recordu bu recordun
+**U20002949** => `-U-` ise belirtilen keyde bir record bulunuyorsa recordun
 
-> 1.  First-name'deki boslukları kaldir. Eger bosluk yoksa `ALREADY UPDATED` mesajını ver.
-> 2.  Lastname'de vara ‘E’ harflerini ‘I’ harfine ve 'A' harflerini ‘e’ harfine cevir.
+> 1.  First-name'indeki boslukları kaldir. Eger bosluk yoksa `ALREADY UPDATED` mesajını ver.
+> 2.  Lastname'de varsa ‘E’ harflerini ‘I’ harfine ve 'A' harflerini ‘e’ harfine cevir.
 
 ---
 
