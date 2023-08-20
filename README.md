@@ -1,9 +1,8 @@
 ## AKBANK COBOL BOOTCAMP - Final Case
+
 ---
 
-
-_**AKBANK COBOL bootcamp'i kapsamında yapmış olduğum bu proje, basit bir \`file handling\` çalışmasıdır.**_   
- 
+_**AKBANK COBOL bootcamp'i kapsamında yapmış olduğum bu proje, basit bir \`file handling\` çalışmasıdır.**_  
 
 ## _PROJENIN ICERIGI_
 
@@ -30,10 +29,6 @@ _**AKBANK COBOL bootcamp'i kapsamında yapmış olduğum bu proje, basit bir \`f
 | CRTVSAM | Creates Vsam file and indexed records |
 | CRTMAIN | JCL for main cobol pgm |
 
-
-
-
-
 ## _PROJE HAKKINDA_
 
 ---
@@ -58,14 +53,13 @@ sonrasında gelen rakamlar ise uygulanacak olan processin VSAM dosyasındaki han
 
 .INP dosyasındaki veriler kullanılarak VSAM dosyasındaki kayıtlar için belirtilen process türlerinden biri `'R' ‘W’ ‘U’ ‘D’` .VSAM'daki record'a uygulanır.
 
-
 ## _Projede Istenilen Ozellikler_
 
 ---
 
-**R63441834** \==> `-R-` ise belirtilen record .VSAM'dan okumaya calis. Output file'a okundu/okunmadı bilgisini yaz.
+**R63441834** ==> `-R-` ise belirtilen record .VSAM'dan okumaya calis. Output file'a okundu/okunmadı bilgisini yaz.
 
-**W63441834** \=> `-W-` ise belirtilen keyde bir record bulunmuyorsa Write lie buraya yeni bir kayıt ekle. Eger bu record key dol ise output file'a \`DUPLICATE RECORD\` mesajını ver.  
+**W63441834** => `-W-` ise belirtilen keyde bir record bulunmuyorsa Write lie buraya yeni bir kayıt ekle. Eger bu record key dol ise output file'a \`DUPLICATE RECORD\` mesajını ver.  
 
 **D20002949** => `-D-` ise belirtilen keyde bir record bulunuyorsa bu recordu sil aksi halde   
 
@@ -100,14 +94,13 @@ _aşağıdaki dosyalara verilen sıra ile_ `SUBMIT JOB` _uygulanmalıdır._
 1.  CRTINFO.jcl
 2.  CRTINPID.jcl
 3.  CRTVSAM.jcl
-4.  CRTMAIN.jcl  
-     
+4.  CRTMAIN.jcl
 
 ## _KULLANILAN BAZI COBOL TERIMLERI_
 
 ---
 
-![](https://33333.cdn.cke-cs.com/kSW7V9NHUXugvhoQeFaf/images/b66be986527b77e089e2d7c974e2df9deb91ccf0adb957ae.png)
+![](https://33333.cdn.cke-cs.com/kSW7V9NHUXugvhoQeFaf/images/24477d8425adebb6e36b48187a7ceab84ff4796499bbcc62.png)
 
 `INPUT-OUTPUT SECTION.`  
   _Harici ortam ile cobol programi arasindaki veri iletimi burada yapilir. input-ouptut dosyalar cobol programi ile burada iliskilendirilir._
@@ -138,9 +131,7 @@ _Burada belirtilen key-name bir dosyadaki her bir recordu benzersiz sekilde tani
 `STATUS`  
 _Dosya islemlerinde dosyanin ne sekilde acildigina dair return-code'lari tutar._
 
->.
-
-![](https://33333.cdn.cke-cs.com/kSW7V9NHUXugvhoQeFaf/images/cbab44b5529a9b8c9981951448826193bfd7958d41f0963b.png)
+![](https://33333.cdn.cke-cs.com/kSW7V9NHUXugvhoQeFaf/images/de523a262428543104163f418d6ea20cdc71f91b6de01df3.png)
 
 `DATA DIVISION.`  
 _Program tarafindan islenecek tum verileri tanimlamak icin kullanilan divisiondir._  
@@ -176,16 +167,12 @@ _numaric veriler COMP. formatinda bellekte pure-binary seklinde depolanir. Degis
 > _4 basamak 2byte yer kaplarken_  
 > _5 basamak 4byte yer kaplar_
 
-_Ondalikli sayilari tutabilir ama binary seklinde tutugu icin yazdirilirken tamsayi haline gelir._  
+_Ondalikli sayilari tutabilir ama binary seklinde tutugu icin yazdirilirken tamsayi haline gelir._ 
 
-![](https://33333.cdn.cke-cs.com/kSW7V9NHUXugvhoQeFaf/images/bc1efb97bbe6a365687d06e87d6febf0fca2dd3ed1ecb33e.png)
-
-  
- 
+![](https://33333.cdn.cke-cs.com/kSW7V9NHUXugvhoQeFaf/images/4eb3f46da57cbef611234b8d488761c2ee551277b6beb6a7.png)
 
 `ENTRY point`  
 _Sub-programda alternatif bir giris noktasi olusturur. Ust-programda bu ENTRY point belirtilirse alt-program direkt bu ENRTY noktasindan baslar. Boylelikle alt programa belirli bir .Vsam isi icin gelinir ve tekrar ust-programa donulur._
-
 
 `INVALID KEY - NOT INVALID KEY`  
 _READ,WRITE, REWRITE, DELETE yapilan recordların durumunu kontrol etmek icin kullanilir.  Belirtilen key'e sahip bir record bulunamazsa veya islem sirasinda bir hata gerceklesirse INVALID KEY'de belirtilen durum gerceklesir. Aksi halde NOT INVALID KEY DURUMU gerceklesir._
