@@ -100,7 +100,7 @@ _aşağıdaki dosyalara verilen sıra ile_ `SUBMIT JOB` _uygulanmalıdır._
 
 ---
 
-![](https://33333.cdn.cke-cs.com/kSW7V9NHUXugvhoQeFaf/images/24477d8425adebb6e36b48187a7ceab84ff4796499bbcc62.png)
+![](img/img1.png)
 
 `INPUT-OUTPUT SECTION.`  
   _Harici ortam ile cobol programi arasindaki veri iletimi burada yapilir. input-ouptut dosyalar cobol programi ile burada iliskilendirilir._
@@ -131,7 +131,7 @@ _Burada belirtilen key-name bir dosyadaki her bir recordu benzersiz sekilde tani
 `STATUS`  
 _Dosya islemlerinde dosyanin ne sekilde acildigina dair return-code'lari tutar._
 
-![](https://33333.cdn.cke-cs.com/kSW7V9NHUXugvhoQeFaf/images/de523a262428543104163f418d6ea20cdc71f91b6de01df3.png)
+![](img/img2.png)
 
 `DATA DIVISION.`  
 _Program tarafindan islenecek tum verileri tanimlamak icin kullanilan divisiondir._  
@@ -169,7 +169,7 @@ _numaric veriler COMP. formatinda bellekte pure-binary seklinde depolanir. Degis
 
 _Ondalikli sayilari tutabilir ama binary seklinde tutugu icin yazdirilirken tamsayi haline gelir._ 
 
-![](https://33333.cdn.cke-cs.com/kSW7V9NHUXugvhoQeFaf/images/4eb3f46da57cbef611234b8d488761c2ee551277b6beb6a7.png)
+![](img/img3.png)
 
 `ENTRY point`  
 _Sub-programda alternatif bir giris noktasi olusturur. Ust-programda bu ENTRY point belirtilirse alt-program direkt bu ENRTY noktasindan baslar. Boylelikle alt programa belirli bir .Vsam isi icin gelinir ve tekrar ust-programa donulur._
